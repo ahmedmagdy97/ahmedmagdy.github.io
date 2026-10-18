@@ -10,15 +10,40 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --bg:#030303; --bg-2:#0b0b0b; --bg-3:#121212; --edge:#232323;
-    --text:#d4d4d4; --soft:#8f8f8f; --dim:#5a5a5a;
-    --silver:linear-gradient(180deg,#ffffff 0%,#d6d6d6 40%,#8a8a8a 75%,#c9c9c9 100%);
-    --chrome:linear-gradient(100deg,#7a7a7a 0%,#e8e8e8 22%,#9a9a9a 40%,#ffffff 55%,#8c8c8c 75%,#dcdcdc 100%);
-    --pad:clamp(16px,6vw,96px);
-    --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
-    --display:"Archivo","Helvetica Neue",Arial,sans-serif;
-  }
+:root {
+  --bg: #080808;
+  --bg-2: #101010;
+  --bg-3: #191919;
+  --edge: #3A3020;
+
+  --text: #F3EDE0;
+  --soft: #B5AA96;
+  --dim: #82765F;
+
+  --silver: linear-gradient(
+    180deg,
+    #FFF2CC 0%,
+    #E6C779 25%,
+    #D4AF62 50%,
+    #AA8137 75%,
+    #F0D994 100%
+  );
+
+  --chrome: linear-gradient(
+    100deg,
+    #98712E 0%,
+    #F0D994 22%,
+    #C49A45 40%,
+    #FFF0BF 55%,
+    #B68A39 75%,
+    #E6C779 100%
+  );
+
+  --pad: clamp(16px, 6vw, 96px);
+
+  --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+  --display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+}
   *{box-sizing:border-box;margin:0;padding:0}
   html{scroll-behavior:smooth}
   body{font-family:var(--display);background:var(--bg);color:var(--text);line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
