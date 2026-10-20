@@ -245,7 +245,25 @@
   .c-grid dd a{text-decoration:none;background:linear-gradient(#ddd,#ddd) 0 100%/0 1px no-repeat;transition:background-size .3s}
   .c-grid dd a:hover{background-size:100% 1px}
   @media(max-width:480px){.c-grid dl{grid-template-columns:1fr;row-gap:2px}.c-grid dd{margin-bottom:14px}}
-  .cta{display:inline-flex;align-items:center;justify-content:center;width:190px;height:190px;border-radius:50%;background:var(--chrome);background-size:200% 100%;color:#000;text-decoration:none;font-weight:800;font-stretch:115%;letter-spacing:.14em;font-size:13px;text-transform:uppercase;text-align:center;transition:transform .2s ease-out;animation:shine 6s linear infinite}
+  .cta{position:relative;isolation:isolate;display:grid;grid-template-columns:1fr auto;align-items:center;gap:10px 34px;min-width:min(100%,360px);padding:20px 28px 28px;border:1px solid #333;color:#eee;text-decoration:none;transition:transform .2s ease-out,color .45s,border-color .45s}
+  .cta::after{content:"";position:absolute;left:0;right:0;bottom:0;height:7px;background:repeating-linear-gradient(90deg,#4a4a4a 0 1px,transparent 1px 14px);transition:opacity .45s}
+  .cta-fill{position:absolute;inset:0;z-index:-1;background:var(--chrome);background-size:200% 100%;transform:scaleX(.06);transform-origin:left;transition:transform .8s cubic-bezier(.7,0,.2,1);animation:shine 6s linear infinite}
+  .cta .mono{display:flex;justify-content:space-between;grid-column:1/-1;transition:color .45s}
+  .cta-pct b{font-weight:600;display:inline-block;transition:transform .45s,opacity .3s}
+  .cta-pct b+b{position:absolute;right:0;opacity:0;transform:translateY(8px)}
+  .cta-pct{position:relative}
+  .cta-label{font-weight:900;font-stretch:120%;font-size:clamp(22px,3vw,30px);text-transform:uppercase;line-height:1}
+  .cta-arrow{font-size:26px;line-height:1;transition:transform .45s cubic-bezier(.2,.8,.2,1)}
+  .cta-ms{position:absolute;right:-8px;top:50%;width:14px;height:14px;margin-top:-7px;background:#fff;transform:rotate(45deg);box-shadow:0 0 0 4px var(--bg)}
+  .cta-ms::after{content:"";position:absolute;inset:0;background:#fff;animation:ms-pulse 2s ease-out infinite}
+  @keyframes ms-pulse{to{opacity:0;transform:scale(2.6)}}
+  .cta:hover,.cta:focus-visible{color:#000;border-color:#bbb;outline:none}
+  .cta:hover .cta-fill,.cta:focus-visible .cta-fill{transform:scaleX(1)}
+  .cta:hover .mono,.cta:focus-visible .mono{color:#222}
+  .cta:hover::after{opacity:.25}
+  .cta:hover .cta-arrow{transform:translateX(8px)}
+  .cta:hover .cta-pct b:first-child{opacity:0;transform:translateY(-8px)}
+  .cta:hover .cta-pct b+b{opacity:1;transform:none}
   footer{color:#555;padding:26px var(--pad);border-top:1px solid #161616;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
 
   .reveal{opacity:0;transform:translateY(30px);transition:opacity .9s,transform .9s cubic-bezier(.2,.8,.2,1)}
@@ -368,7 +386,13 @@
         <dt class="mono">Location</dt><dd>Cairo, Egypt</dd>
       </dl>
     </div>
-    <a class="cta" id="cta" href="mailto:ahmed.magdy.aly@outlook.com">Start a<br>project ◆</a>
+    <a class="cta" id="cta" href="mailto:ahmed.magdy.aly@outlook.com">
+      <span class="cta-fill"></span>
+      <span class="mono"><span>Task 01 · Kickoff</span><span class="cta-pct"><b>0%</b><b>100%</b></span></span>
+      <span class="cta-label">Start a project</span>
+      <span class="cta-arrow">→</span>
+      <i class="cta-ms"></i>
+    </a>
   </div>
 </section>
 <footer class="mono"><span>Ahmed Magdy / Project Controls Portfolio</span><span>Egypt · Saudi Arabia</span></footer>
@@ -584,7 +608,7 @@ modal.addEventListener("keydown", e => { if (e.key === "ArrowRight") openProject
 const cta = $("#cta");
 cta.addEventListener("pointermove", e => {
   const r = cta.getBoundingClientRect();
-  cta.style.transform = `translate(${(e.clientX - r.left - r.width/2) * .25}px,${(e.clientY - r.top - r.height/2) * .25}px)`;
+  cta.style.transform = `translate(${(e.clientX - r.left - r.width/2) * .12}px,${(e.clientY - r.top - r.height/2) * .2}px)`;
 });
 cta.addEventListener("pointerleave", () => cta.style.transform = "");
 
