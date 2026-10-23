@@ -222,10 +222,8 @@ nav ul a:hover{color:#fff}
 .card::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .3s;background:radial-gradient(400px circle at var(--mx,50%) var(--my,50%),rgba(255,255,255,.12),transparent 50%)}
 .card:hover{border-color:#555}
 .card:hover::before{opacity:1}
-.card .n{position:absolute;right:18px;top:6px;font-weight:900;font-size:84px;line-height:1;color:transparent;-webkit-text-stroke:1px #2a2a2a;transition:-webkit-text-stroke-color .3s}
-.card:hover .n{-webkit-text-stroke-color:#6a6a6a}
 .card .tag{font-family:var(--mono);font-size:10px;letter-spacing:.18em;color:#8a8a8a;text-transform:uppercase}
-.card h4{font-weight:900;font-size:25px;color:#efefef;line-height:1.05;text-transform:uppercase;max-width:85%}
+.card h4{font-weight:900;font-size:25px;color:#efefef;line-height:1.05;text-transform:uppercase;max-width:100%}
 .card h4 sup{font-size:.5em}
 .card .sub{font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#777}
 .card .logos{height:74px;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,#f5f5f5,#d4d4d4);padding:10px 14px;margin-top:6px}
@@ -254,7 +252,30 @@ dl dd:last-child{margin-bottom:0}
 .m-nav button{flex:1;padding:18px;background:none;border:0;color:#999;font-family:var(--mono);font-size:11px;letter-spacing:.2em;cursor:pointer;text-transform:uppercase}
 .m-nav button+button{border-left:1px solid #222}
 .m-nav button:hover{background:#111;color:#fff}
-.close{position:absolute;top:14px;right:14px;width:42px;height:42px;border:0;background:var(--chrome);color:#000;font-size:22px;cursor:pointer}
+
+/* Close button: simple white X, no gold background or frame */
+.close{
+  position:absolute;
+  top:14px;
+  right:14px;
+  width:42px;
+  height:42px;
+  display:grid;
+  place-items:center;
+  padding:0;
+  border:0;
+  outline:none;
+  background:transparent;
+  color:#fff;
+  font-family:Arial,sans-serif;
+  font-size:32px;
+  font-weight:300;
+  line-height:1;
+  cursor:pointer;
+  box-shadow:none;
+}
+.close:hover{color:#bbb;background:transparent}
+.close:focus-visible{outline:1px solid #777;outline-offset:2px}
 
 #contact{min-height:90vh;display:flex;flex-direction:column;justify-content:center;overflow:hidden}
 #contact h2{font-weight:900;font-size:clamp(46px,10vw,150px);line-height:.88;letter-spacing:-.03em;text-transform:uppercase;margin:30px 0 70px}
@@ -524,14 +545,12 @@ function measureMarquee(){
 function normalizeMarqueeOffset(offset){
   if(loopWidth <= 0) return offset;
 
-  // Keep the track within one loop while preserving the same visual position.
   let normalized = ((offset % loopWidth) + loopWidth) % loopWidth;
   if(normalized > 0) normalized -= loopWidth;
   return normalized;
 }
 
 function startMarqueeDrag(e){
-  // Only start a mouse drag with the left button.
   if(e.pointerType === "mouse" && e.button !== 0) return;
   if(isDragging) return;
 
@@ -554,7 +573,6 @@ function startMarqueeDrag(e){
 function moveMarqueeDrag(e){
   if(!isDragging || e.pointerId !== activePointerId) return;
 
-  // Follow the pointer directly. Dragging either way changes the track position.
   marqueeOffset = dragStartOffset + (e.clientX - dragStartX);
   mq.style.transform = `translate3d(${marqueeOffset}px,0,0)`;
 
@@ -567,7 +585,6 @@ function finishMarqueeDrag(e){
 
   const pointerId = activePointerId;
 
-  // Normalize the offset to the duplicated loop without changing its visual position.
   marqueeOffset = normalizeMarqueeOffset(marqueeOffset);
   mq.style.transform = `translate3d(${marqueeOffset}px,0,0)`;
 
@@ -575,7 +592,6 @@ function finishMarqueeDrag(e){
   activePointerId = null;
   marquee.classList.remove("dragging");
 
-  // Avoid a large animation step after the user has been dragging.
   lastFrameTime = performance.now();
 
   if(pointerId !== null && marquee.hasPointerCapture?.(pointerId)){
@@ -592,10 +608,8 @@ function animateMarquee(now){
   lastFrameTime = now;
 
   if(!isDragging && loopWidth > 0 && !reduced){
-    // Same direction and approximately the same speed as the original 60-second CSS loop.
     marqueeOffset -= (loopWidth / (MARQUEE_LOOP_SECONDS * 1000)) * elapsed;
 
-    // Wrap by exactly one loop so the duplicated client list remains seamless.
     if(marqueeOffset <= -loopWidth){
       marqueeOffset += loopWidth;
     }
@@ -666,7 +680,6 @@ function renderCards(f){
   let k=0;
   cards.innerHTML=PROJECTS.map((p,i)=>f!=="all"&&p.c!==f?"":`
     <button class="card" data-i="${i}" style="animation-delay:${(k++)*.05}s">
-      <span class="n">${pad2(i+1)}</span>
       <span class="tag">${label(p)}</span>
       <h4>${p.title}</h4>
       <span class="sub">${esc(p.sub)}</span>
