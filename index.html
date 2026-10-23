@@ -188,7 +188,19 @@ nav ul a:hover{color:#fff}
 .svc{border-top:1px solid #1c1c1c}
 .svc-row{display:grid;grid-template-columns:minmax(220px,.8fr) 1.4fr;gap:12px 36px;align-items:start;padding:26px 0;border-bottom:1px solid #1c1c1c}
 .svc-row h3{font-weight:800;font-size:clamp(17px,1.6vw,22px);text-transform:uppercase;color:#cfcfcf;transition:color .3s}
-.svc-row p{color:#9a9a9a;font-size:16px}
+.svc-row p{
+  color:#9a9a9a;
+  font-size:16px;
+  opacity:0;
+  transform:translateY(18px);
+  transition:opacity .8s ease, transform .8s cubic-bezier(.2,.8,.2,1);
+  transition-delay:.18s;
+}
+
+.svc-row.in p{
+  opacity:1;
+  transform:translateY(0);
+}
 .svc-row:hover h3{color:#fff}
 @media(max-width:800px){.svc-row{grid-template-columns:1fr;gap:8px}}
 
