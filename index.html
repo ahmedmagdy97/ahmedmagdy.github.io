@@ -91,7 +91,7 @@ nav ul a:hover{color:#fff}
   #hero h1{font-size:clamp(40px,12.8vw,52px)}
 }
 
-/* Client marquee: auto-scroll, hover pause and drag support */
+/* Client marquee: continuous auto-scroll, solid text and persistent drag position */
 .marquee{
   border-block:1px solid #1a1a1a;
   padding:26px 0;
@@ -104,17 +104,31 @@ nav ul a:hover{color:#fff}
   -webkit-user-select:none;
 }
 .marquee.dragging{cursor:grabbing}
-.marquee::before,.marquee::after{content:"";position:absolute;top:0;bottom:0;width:12vw;z-index:2;pointer-events:none}
-.marquee::before{left:0;background:linear-gradient(90deg,#000,transparent)}
-.marquee::after{right:0;background:linear-gradient(-90deg,#000,transparent)}
+.marquee::before,
+.marquee::after{
+  content:"";
+  position:absolute;
+  top:0;
+  bottom:0;
+  width:12vw;
+  z-index:2;
+  pointer-events:none;
+}
+.marquee::before{
+  left:0;
+  background:linear-gradient(90deg,#000,transparent);
+}
+.marquee::after{
+  right:0;
+  background:linear-gradient(-90deg,#000,transparent);
+}
 .marquee .track{
   display:flex;
   width:max-content;
-  animation:mq 60s linear infinite;
+  transform:translate3d(0,0,0);
   will-change:transform;
 }
-.marquee:hover .track{animation-play-state:paused}
-.marquee.dragging .track{animation:none!important}
+.marquee.dragging .track{will-change:transform}
 .marquee span{
   font-weight:900;
   font-stretch:120%;
@@ -122,14 +136,22 @@ nav ul a:hover{color:#fff}
   text-transform:uppercase;
   white-space:nowrap;
   padding:0 28px;
-  color:transparent;
-  -webkit-text-stroke:1px #6a6a6a;
-  transition:color .3s,-webkit-text-stroke-color .3s;
+  color:#6a6a6a;
+  -webkit-text-stroke:0;
+  transition:color .3s ease;
+  cursor:grab;
+}
+.marquee span:hover{color:#eee}
+.marquee.dragging span{cursor:grabbing}
+.marquee em{
+  align-self:center;
+  width:12px;
+  height:12px;
+  background:#777;
+  transform:rotate(45deg);
+  flex:none;
   pointer-events:none;
 }
-.marquee span:hover{color:#eee;-webkit-text-stroke-color:#eee}
-.marquee em{align-self:center;width:12px;height:12px;background:#777;transform:rotate(45deg);flex:none;pointer-events:none}
-@keyframes mq{to{transform:translateX(-50%)}}
 
 .statement{font-weight:700;font-size:clamp(26px,3.8vw,52px);line-height:1.18;letter-spacing:-.01em;max-width:1200px}
 .statement span{color:#2b2b2b;transition:color .25s}
@@ -247,7 +269,11 @@ dl dd:last-child{margin-bottom:0}
 footer{color:#555;padding:26px var(--pad);border-top:1px solid #161616;display:flex;justify-content:flex-start;gap:20px;flex-wrap:wrap}
 .reveal{opacity:0;transform:translateY(30px);transition:opacity .9s,transform .9s cubic-bezier(.2,.8,.2,1)}
 .reveal.in{opacity:1;transform:none}
-@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.reveal{opacity:1;transform:none}#hero h1 span i{transform:none}}
+@media(prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  .reveal{opacity:1;transform:none}
+  #hero h1 span i{transform:none}
+}
 </style>
 </head>
 
@@ -469,48 +495,53 @@ hero.addEventListener("pointermove",e=>{
   hero.style.setProperty("--y",e.clientY-r.top+"px");
 });
 
-/* Client marquee */
+/* Client marquee: drag without resetting the animation position */
 const CLIENTS = ["EMAAR","Palm Hills","Mountain View","Hassan Allam Properties","NHC","JLL","Julius Berger","GUPCO","El-Sewedy Sedco","Summit","Grifols Egypt","NSPO","Mostakbal Misr","Wadi Valley","Ardic","AQAR Masr","Al-Qamzi","U-Design","Water Academy","Diar"];
 const mq = $("#mq");
 const marquee = $("#client-marquee");
 const mqHtml = CLIENTS.map(c=>`<span>${esc(c)}</span><em></em>`).join("");
 mq.innerHTML = mqHtml + mqHtml;
 
-/*
- * Drag behavior:
- * - Capture the current animated position when dragging starts.
- * - Move the track directly with the pointer.
- * - On release, normalize the position to one loop and resume
- *   the CSS animation from that position.
- */
 let isDragging = false;
 let dragStartX = 0;
-let dragStartTranslate = 0;
+let dragStartOffset = 0;
 let activePointerId = null;
+let marqueeOffset = 0;
+let loopWidth = 0;
+let lastFrameTime = null;
 
-function getTranslateX(element){
-  const transform = getComputedStyle(element).transform;
-  if(!transform || transform === "none") return 0;
+const MARQUEE_LOOP_SECONDS = 60;
 
-  if(typeof DOMMatrixReadOnly !== "undefined"){
-    return new DOMMatrixReadOnly(transform).m41;
-  }
+function measureMarquee(){
+  const measuredWidth = mq.scrollWidth / 2;
+  if(measuredWidth <= 0) return;
 
-  const match = transform.match(/^matrix\((.+)\)$/);
-  return match ? Number(match[1].split(",")[4]) || 0 : 0;
+  loopWidth = measuredWidth;
+  marqueeOffset = normalizeMarqueeOffset(marqueeOffset);
+  mq.style.transform = `translate3d(${marqueeOffset}px,0,0)`;
+}
+
+function normalizeMarqueeOffset(offset){
+  if(loopWidth <= 0) return offset;
+
+  // Keep the track within one loop while preserving the same visual position.
+  let normalized = ((offset % loopWidth) + loopWidth) % loopWidth;
+  if(normalized > 0) normalized -= loopWidth;
+  return normalized;
 }
 
 function startMarqueeDrag(e){
+  // Only start a mouse drag with the left button.
   if(e.pointerType === "mouse" && e.button !== 0) return;
+  if(isDragging) return;
+
+  if(loopWidth <= 0) measureMarquee();
 
   isDragging = true;
   activePointerId = e.pointerId;
   dragStartX = e.clientX;
-  dragStartTranslate = getTranslateX(mq);
+  dragStartOffset = marqueeOffset;
 
-  // Freeze the animation at its exact current position.
-  mq.style.animation = "none";
-  mq.style.transform = `translateX(${dragStartTranslate}px)`;
   marquee.classList.add("dragging");
 
   if(marquee.setPointerCapture){
@@ -523,8 +554,10 @@ function startMarqueeDrag(e){
 function moveMarqueeDrag(e){
   if(!isDragging || e.pointerId !== activePointerId) return;
 
-  const delta = e.clientX - dragStartX;
-  mq.style.transform = `translateX(${dragStartTranslate + delta}px)`;
+  // Follow the pointer directly. Dragging either way changes the track position.
+  marqueeOffset = dragStartOffset + (e.clientX - dragStartX);
+  mq.style.transform = `translate3d(${marqueeOffset}px,0,0)`;
+
   e.preventDefault();
 }
 
@@ -532,39 +565,45 @@ function finishMarqueeDrag(e){
   if(!isDragging) return;
   if(e && e.pointerId !== activePointerId) return;
 
+  const pointerId = activePointerId;
+
+  // Normalize the offset to the duplicated loop without changing its visual position.
+  marqueeOffset = normalizeMarqueeOffset(marqueeOffset);
+  mq.style.transform = `translate3d(${marqueeOffset}px,0,0)`;
+
   isDragging = false;
   activePointerId = null;
   marquee.classList.remove("dragging");
 
-  // One copy of the client list is half the duplicated track width.
-  const loopWidth = mq.scrollWidth / 2;
+  // Avoid a large animation step after the user has been dragging.
+  lastFrameTime = performance.now();
 
-  if(loopWidth > 0){
-    const currentX = getTranslateX(mq);
+  if(pointerId !== null && marquee.hasPointerCapture?.(pointerId)){
+    marquee.releasePointerCapture(pointerId);
+  }
+}
 
-    // Keep the offset within one complete loop.
-    let offset = ((currentX % loopWidth) + loopWidth) % loopWidth;
-    if(offset > 0) offset -= loopWidth;
-
-    // The animation lasts 60 seconds for one full loop.
-    const progress = Math.min(1, Math.max(0, -offset / loopWidth));
-    const delay = -progress * 60;
-
-    mq.style.animation = "none";
-    mq.style.transform = "none";
-    mq.style.animationDelay = `${delay}s`;
-
-    // Apply the delay before restoring the animation.
-    void mq.offsetWidth;
-    mq.style.animation = "";
-  }else{
-    mq.style.transform = "";
-    mq.style.animation = "";
+function animateMarquee(now){
+  if(lastFrameTime === null){
+    lastFrameTime = now;
   }
 
-  if(e && marquee.hasPointerCapture?.(e.pointerId)){
-    marquee.releasePointerCapture(e.pointerId);
+  const elapsed = Math.min(50, now - lastFrameTime);
+  lastFrameTime = now;
+
+  if(!isDragging && loopWidth > 0 && !reduced){
+    // Same direction and approximately the same speed as the original 60-second CSS loop.
+    marqueeOffset -= (loopWidth / (MARQUEE_LOOP_SECONDS * 1000)) * elapsed;
+
+    // Wrap by exactly one loop so the duplicated client list remains seamless.
+    if(marqueeOffset <= -loopWidth){
+      marqueeOffset += loopWidth;
+    }
+
+    mq.style.transform = `translate3d(${marqueeOffset}px,0,0)`;
   }
+
+  requestAnimationFrame(animateMarquee);
 }
 
 marquee.addEventListener("pointerdown", startMarqueeDrag);
@@ -576,6 +615,10 @@ marquee.addEventListener("lostpointercapture", e=>{
     finishMarqueeDrag(e);
   }
 });
+
+window.addEventListener("resize", measureMarquee);
+measureMarquee();
+requestAnimationFrame(animateMarquee);
 
 /* Statement word reveal */
 const st=$("#statement");
