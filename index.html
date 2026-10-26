@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#000000">
-<title>Ahmed Magdy — Senior Project Controls Engineer</title>
-<meta name="description" content="Ahmed Magdy — Senior Project Controls Engineer. Planning, scheduling, delay analysis and project controls for international projects.">
+<title>Ahmed Magdy — Project Controls and Planning</title>
+<meta name="description" content="Ahmed Magdy — Project Controls and Planning. Planning, scheduling, delay analysis and project controls for international projects.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -39,6 +39,7 @@ section{padding:110px var(--pad);position:relative}
 .grid-bg{background-image:repeating-linear-gradient(90deg,rgba(255,255,255,.025) 0 1px,transparent 1px calc(100%/14))}
 .head{display:flex;flex-direction:column;gap:18px;margin-bottom:56px}
 .head h2{font-weight:900;font-stretch:112%;font-size:clamp(42px,8vw,104px);line-height:.92;letter-spacing:-.02em;text-transform:uppercase}
+#profile .head h2,#where .head h2,#services .head h2{font-size:clamp(30px,3.6vw,46px);line-height:1}
 #loader{position:fixed;inset:0;z-index:200;background:#000;display:grid;place-items:center;transition:opacity .6s,visibility .6s}
 #loader.done{opacity:0;visibility:hidden}
 #loader .box{width:min(420px,80vw)}
@@ -157,6 +158,7 @@ nav ul a:hover{color:#fff}
 .statement span{color:#2b2b2b;transition:color .25s}
 .statement span.lit{color:#e9e9e9}
 .profile-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;margin-top:80px}
+#side-track{scroll-margin-top:100px}
 @media(max-width:900px){.profile-grid{grid-template-columns:1fr}}
 .stats{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#1c1c1c;border:1px solid #1c1c1c}
 .stats div{background:var(--bg);padding:30px 26px}
@@ -176,7 +178,7 @@ nav ul a:hover{color:#fff}
 .journey .projects{list-style:none;display:grid;gap:7px;margin:0 0 14px;padding:0}
 .journey .projects li{font-size:12px;line-height:1.45;color:#aaa;padding-left:10px;position:relative}
 .journey .projects li::before{content:"";position:absolute;left:0;top:.55em;width:4px;height:4px;background:#b99a53;transform:rotate(45deg)}
-.journey .company{display:block;border-top:1px solid #292929;padding-top:9px;font-family:var(--mono);font-size:9px;line-height:1.5;letter-spacing:.06em;color:#777;text-transform:uppercase}
+.journey .company{display:block;border-top:1px solid #292929;padding-top:9px;font-family:var(--mono);font-size:9px;line-height:1.5;letter-spacing:.06em;color:#e6e6e6;text-transform:uppercase}
 .journey .stop .diamond{position:absolute;top:0;left:0;background:#333;transition:background .5s,box-shadow .5s;z-index:1}
 .journey .stop .date{position:absolute;left:0;top:-34px;color:#c9b16f;font-family:var(--mono);font-size:10px;line-height:1.5;letter-spacing:.04em;white-space:normal;max-width:100%}
 .journey .stop.on{color:#e6e6e6}
@@ -331,19 +333,17 @@ footer{color:#555;padding:26px var(--pad);border-top:1px solid #161616;display:f
   <a class="brand" href="#hero"><span class="diamond"></span><span class="silver">AHMED MAGDY</span></a>
   <ul>
     <li><a href="#profile">01 Profile</a></li>
-    <li><a href="#where">02 Locations</a></li>
-    <li><a href="#projects">03 Projects</a></li>
-    <li><a href="#services">04 Services</a></li>
-    <li><a href="#contact">05 Contact</a></li>
+    <li><a href="#side-track">02 Side Track</a></li>
+    <li><a href="#services">03 Services</a></li>
+    <li><a href="#contact">04 Contact</a></li>
   </ul>
 </nav>
 
 <header id="hero" class="grid-bg">
   <div id="spot"></div>
-  <div class="mono" style="margin-bottom:22px;position:relative">PROJECT CONTROLS AND PLANNING</div>
   <h1><span><i class="chrome">AHMED</i></span><span><i class="chrome">MAGDY</i></span></h1>
   <div class="hero-foot">
-    <div class="role">Senior Project Controls Engineer</div>
+    <div class="role">Project Controls and Planning</div>
   </div>
 </header>
 
@@ -356,7 +356,7 @@ footer{color:#555;padding:26px var(--pad);border-top:1px solid #161616;display:f
   <p class="statement" id="statement">I plan, schedule, and control projects across civil, architectural, electromechanical, infrastructure, and landscape fields; spanning baseline and recovery scheduling, delay analysis, progress monitoring, and project reporting.</p>
 
   <div class="journey" id="journey">
-    <h3 class="silver">Professional Journey</h3>
+    <h3 class="silver">Main Journey</h3>
     <div class="line">
       <div class="stop">
         <span class="date">Nov 2021 – May 2022</span>
@@ -411,23 +411,23 @@ footer{color:#555;padding:26px var(--pad);border-top:1px solid #161616;display:f
 
 
   <div class="profile-grid">
+    <div class="freelance reveal" id="side-track">
+      <h3 class="silver">Side Track</h3>
+      <p>My freelance work builds on my experience in project planning and controls, supporting projects at different stages of their lifecycle, from developing new baselines and restructuring existing schedules to analyzing delays and strengthening project reporting.</p>
+      <p>The following pages showcase selected projects from my independent freelance work, highlighting the projects scope, my contribution, and the added value.</p>
+    </div>
     <div class="stats reveal">
       <div><b class="silver" data-count="18">0</b><span class="mono">Freelance projects</span></div>
       <div><b class="silver" data-count="1.35" data-pre="EGP " data-suf="B+">0</b><span class="mono">Egypt project value</span></div>
       <div><b class="silver" data-count="9">0</b><span class="mono">Clients</span></div>
       <div><b class="silver" data-count="16">0</b><span class="mono">Locations · 2 countries</span></div>
     </div>
-    <div class="freelance reveal">
-      <h3 class="silver">Freelance track</h3>
-      <p>My freelance work builds on my experience in project planning and controls, supporting projects at different stages of their lifecycle, from developing new baselines and restructuring existing schedules to analyzing delays and strengthening project reporting.</p>
-      <p>The following pages showcase selected projects from my independent freelance work, highlighting the projects scope, my contribution, and the added value.</p>
-    </div>
   </div>
 
 </section>
 
 <section id="where" class="grid-bg">
-  <div class="head"><span class="mono">02 / Locations</span><h2 class="silver">Where I've worked</h2></div>
+  <div class="head"><span class="mono">Freelance Work</span><h2 class="silver">Freelance Projects</h2></div>
   <div class="where">
     <div class="country reveal" data-c="eg">
       <span class="big">EG</span>
@@ -444,8 +444,7 @@ footer{color:#555;padding:26px var(--pad);border-top:1px solid #161616;display:f
   </div>
 </section>
 
-<section id="projects">
-  <div class="head"><span class="mono">03 / Selected projects</span><h2 class="silver">Projects</h2></div>
+<section id="projects" aria-label="Selected freelance projects">
   <div class="tabs">
     <button class="on" data-f="all">All · 18</button>
     <button data-f="eg">Egypt · 14</button>
@@ -455,7 +454,7 @@ footer{color:#555;padding:26px var(--pad);border-top:1px solid #161616;display:f
 </section>
 
 <section id="services">
-  <div class="head"><span class="mono">04 / Services</span><h2 class="silver">What I provide</h2></div>
+  <div class="head"><span class="mono">03 / Services</span><h2 class="silver">What I provide</h2></div>
   <div class="svc" id="svc"></div>
 </section>
 
@@ -465,7 +464,7 @@ footer{color:#555;padding:26px var(--pad);border-top:1px solid #161616;display:f
   <div class="c-grid">
     <div>
       <h3 class="silver">AHMED MAGDY</h3>
-      <div class="role mono">Senior Project Controls Engineer</div>
+      <div class="role mono">Project Controls and Planning</div>
       <dl>
         <dt class="mono">Email</dt><dd><a href="mailto:ahmed.magdy.aly@outlook.com">ahmed.magdy.aly@outlook.com</a></dd>
         <dt class="mono">Phone</dt><dd><a href="tel:+201113151612">+20 111 315 1612</a></dd>
