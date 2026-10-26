@@ -39,7 +39,7 @@ section{padding:110px var(--pad);position:relative}
 .grid-bg{background-image:repeating-linear-gradient(90deg,rgba(255,255,255,.025) 0 1px,transparent 1px calc(100%/14))}
 .head{display:flex;flex-direction:column;gap:18px;margin-bottom:56px}
 .head h2{font-weight:900;font-stretch:112%;font-size:clamp(42px,8vw,104px);line-height:.92;letter-spacing:-.02em;text-transform:uppercase}
-#profile .head h2,#where .head h2,#services .head h2{font-size:clamp(30px,3.6vw,46px);line-height:1}
+#where .head h2,#services .head h2{font-size:clamp(30px,3.6vw,46px);line-height:1}
 #loader{position:fixed;inset:0;z-index:200;background:#000;display:grid;place-items:center;transition:opacity .6s,visibility .6s}
 #loader.done{opacity:0;visibility:hidden}
 #loader .box{width:min(420px,80vw)}
@@ -427,7 +427,6 @@ footer{color:#555;padding:26px var(--pad);border-top:1px solid #161616;display:f
 </section>
 
 <section id="where" class="grid-bg">
-  <div class="head"><span class="mono">Freelance Work</span><h2 class="silver">Freelance Projects</h2></div>
   <div class="where">
     <div class="country reveal" data-c="eg">
       <span class="big">EG</span>
