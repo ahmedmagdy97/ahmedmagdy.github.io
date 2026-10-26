@@ -162,15 +162,21 @@ nav ul a:hover{color:#fff}
 .stats div{background:var(--bg);padding:30px 26px}
 .stats b{display:block;font-weight:900;font-size:clamp(40px,5vw,64px);line-height:1}
 .stats .mono{margin-top:10px;display:block}
-.freelance h3{font-weight:900;font-size:clamp(30px,3.6vw,46px);line-height:1;text-transform:uppercase;margin-bottom:22px}
+.freelance h3,.journey h3{font-weight:900;font-size:clamp(30px,3.6vw,46px);line-height:1;text-transform:uppercase;margin-bottom:22px}
 .freelance p{color:#a4a4a4;font-size:17px}
 .freelance p+p{margin-top:14px}
 
 .journey{margin-top:90px}
+.journey h3{display:block}
 .journey .line{position:relative;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:18px;margin-top:58px}
 .journey .line::before{content:"";position:absolute;top:5px;left:0;right:0;border-top:1px dashed #333}
 .journey .line::after{content:"";position:absolute;top:5px;left:0;height:1px;width:var(--p,0%);background:var(--chrome);transition:width 2s cubic-bezier(.3,.7,.2,1)}
 .journey .stop{position:relative;padding-top:34px;font-size:15px;color:#7a7a7a;transition:color .5s;overflow-wrap:anywhere}
+.journey .position{display:block;font-size:clamp(13px,1.15vw,16px);font-weight:800;line-height:1.35;color:#e6e6e6;margin-bottom:10px}
+.journey .projects{list-style:none;display:grid;gap:7px;margin:0 0 14px;padding:0}
+.journey .projects li{font-size:12px;line-height:1.45;color:#aaa;padding-left:10px;position:relative}
+.journey .projects li::before{content:"";position:absolute;left:0;top:.55em;width:4px;height:4px;background:#b99a53;transform:rotate(45deg)}
+.journey .company{display:block;border-top:1px solid #292929;padding-top:9px;font-family:var(--mono);font-size:9px;line-height:1.5;letter-spacing:.06em;color:#777;text-transform:uppercase}
 .journey .stop .diamond{position:absolute;top:0;left:0;background:#333;transition:background .5s,box-shadow .5s;z-index:1}
 .journey .stop .date{position:absolute;left:0;top:-34px;color:#c9b16f;font-family:var(--mono);font-size:10px;line-height:1.5;letter-spacing:.04em;white-space:normal;max-width:100%}
 .journey .stop.on{color:#e6e6e6}
@@ -364,32 +370,55 @@ footer{color:#555;padding:26px var(--pad);border-top:1px solid #161616;display:f
   </div>
 
   <div class="journey" id="journey">
-    <span class="mono">PROFESSIONAL JOURNEY</span>
+    <h3 class="silver">Professional Journey</h3>
     <div class="line">
       <div class="stop">
         <span class="date">Nov 2021 – May 2022</span>
         <span class="diamond"></span>
-        Dream for Contracting, Supplies, &amp; Real Estate
+        <div class="position">Site Engineer</div>
+        <ul class="projects">
+          <li>Al Jawhara – The New Administrative Capital</li>
+        </ul>
+        <span class="company">Dream for Contracting, Supplies, &amp; Real Estate</span>
       </div>
       <div class="stop">
         <span class="date">May 2022 – Dec 2022</span>
         <span class="diamond"></span>
-        Shibh Al Jazira for Construction
+        <div class="position">Site Engineer</div>
+        <ul class="projects">
+          <li>Abraj Misr – Nasr City</li>
+        </ul>
+        <span class="company">Shibh Al Jazira for Construction</span>
       </div>
       <div class="stop">
         <span class="date">Dec 2022 – Aug 2023</span>
         <span class="diamond"></span>
-        Expert PME / Tanta Motors Co.
+        <div class="position">Planning Engineer</div>
+        <ul class="projects">
+          <li>Sugar Beet Factory – Minya</li>
+          <li>Dabaa Nuclear Power Plant – El Dabaa</li>
+          <li>Haya Karima – Upper Egypt</li>
+        </ul>
+        <span class="company">Expert PME / Tanta Motors Co.</span>
       </div>
       <div class="stop">
         <span class="date">Aug 2023 – Oct 2024</span>
         <span class="diamond"></span>
-        Al-Shorouk Construction
+        <div class="position">Planning Engineer</div>
+        <ul class="projects">
+          <li>Sodic Karmell – New Zayed</li>
+          <li>Kinda – Taj City</li>
+        </ul>
+        <span class="company">Al-Shorouk Construction</span>
       </div>
       <div class="stop">
         <span class="date">Oct 2024 – Present</span>
         <span class="diamond"></span>
-        Madinet Masr<br><em>Current</em>
+        <div class="position">Project Controls Engineer → Senior Project Controls Engineer</div>
+        <ul class="projects">
+          <li>Taj City</li>
+        </ul>
+        <span class="company">Madinet Masr</span><br><em>Current</em>
       </div>
     </div>
   </div>
