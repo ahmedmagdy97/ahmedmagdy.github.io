@@ -6,6 +6,7 @@
 <meta name="theme-color" content="#000000">
 <title>Ahmed Magdy — Project Controls and Planning</title>
 <meta name="description" content="Ahmed Magdy — Project Controls and Planning. Planning, scheduling, delay analysis and project controls for international projects.">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -230,6 +231,22 @@ nav ul a:hover{color:#fff}
 .net .node:hover text{fill:#fff}
 @keyframes pulse{0%{opacity:.6;transform:rotate(45deg) scale(1)}100%{opacity:0;transform:rotate(45deg) scale(3)}}
 .country .big{position:absolute;right:-10px;bottom:-30px;font-weight:900;font-size:200px;line-height:1;color:transparent;-webkit-text-stroke:1px #1a1a1a;pointer-events:none}
+.country .project-map{height:390px;width:100%;margin-top:20px;background:#101010;border:1px solid #242424;z-index:1}
+.country .leaflet-container{font-family:var(--display);background:#101010;color:var(--text)}
+.country .leaflet-tile{filter:grayscale(1) invert(.88) brightness(.72) contrast(.9)}
+.country .leaflet-control-attribution{background:rgba(0,0,0,.72)!important;color:#888!important;font-size:9px}
+.country .leaflet-control-attribution a{color:#c9b16f!important}
+.country .leaflet-control-zoom a{background:#111!important;color:#e9e9e9!important;border-color:#333!important}
+.project-pin{width:24px;height:24px;display:grid;place-items:center;background:linear-gradient(135deg,#fff0bf,#b68a39);border:1px solid #fff0bf;transform:rotate(45deg);box-shadow:0 0 14px rgba(230,199,121,.28);color:#080808;font:700 9px var(--mono)}
+.project-pin span{transform:rotate(-45deg)}
+.leaflet-tooltip.project-tip{background:#080808;border:1px solid #4a3b22;border-radius:0;color:#f3ede0;font:10px var(--mono);letter-spacing:.06em;text-transform:uppercase;box-shadow:none;padding:6px 8px}
+.leaflet-tooltip.project-tip:before{border-top-color:#4a3b22}
+.leaflet-popup-content-wrapper,.leaflet-popup-tip{background:#101010;color:#f3ede0;border:1px solid #3a3020;border-radius:0;box-shadow:0 8px 30px #000}
+.leaflet-popup-content{font-family:var(--display);margin:14px 16px;line-height:1.45}
+.map-popup-title{font-weight:900;text-transform:uppercase;font-size:13px;margin-bottom:5px}
+.map-popup-meta{font:10px var(--mono);letter-spacing:.06em;color:#c9b16f;text-transform:uppercase}
+.map-popup-action{display:inline-block;margin-top:9px;color:#f0d994;font:10px var(--mono);letter-spacing:.12em;text-transform:uppercase}
+@media(max-width:600px){.country{padding:22px}.country .project-map{height:320px}}
 
 .tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:40px}
 .tabs button{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;padding:12px 18px;border:1px solid #2c2c2c;background:transparent;color:#9a9a9a;cursor:pointer;transition:.25s}
@@ -432,13 +449,15 @@ footer{color:#555;padding:26px var(--pad);border-top:1px solid #161616;display:f
       <span class="big">EG</span>
       <h3 class="silver">Egypt</h3>
       <div class="meta mono"><b>14</b> projects · <b>EGP 1.35B+</b> · <b>7</b> clients</div>
-      <svg class="net" viewBox="-10 -10 560 470"></svg>
+      <div class="project-map" id="map-eg" role="application" aria-label="Interactive map of 14 freelance projects in Egypt"></div>
+      <p class="mono" style="font-size:9px;margin-top:10px;color:#777">Approximate project locations · Select a marker to view details</p>
     </div>
     <div class="country reveal" data-c="ksa">
       <span class="big">SA</span>
       <h3 class="silver">Kingdom of Saudi Arabia</h3>
       <div class="meta mono"><b>4</b> projects · <b>2</b> clients</div>
-      <svg class="net" viewBox="-10 -40 360 220"></svg>
+      <div class="project-map" id="map-ksa" role="application" aria-label="Interactive map of 4 freelance projects in Saudi Arabia"></div>
+      <p class="mono" style="font-size:9px;margin-top:10px;color:#777">Approximate project locations · Select a marker to view details</p>
     </div>
   </div>
 </section>
@@ -482,6 +501,7 @@ footer{color:#555;padding:26px var(--pad);border-top:1px solid #161616;display:f
   <div class="m-nav"><button id="m-prev">← Previous</button><button id="m-next">Next →</button></div>
 </dialog>
 
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script>
 const SERVICES = [
 ["Project Planning & Execution Strategy","Developing full project life-cycle plans based on project scope, execution strategy, resource availability, sequencing, and contractual requirements."],
@@ -513,21 +533,6 @@ const PROJECTS = [
 {c:"ksa",loc:"Riyadh",title:"RIYADH — KHASHM AL AAN",sub:"Earthworks & Grading for National Guard Land",logo:"p21",owner:"NHC",consultant:"—",contractor:"—",role:"Contractor’s Planning Engineer",scope:"Site clearing, grubbing, cutting, and filling works for the National Guard Land over the area of 5.77 million m².",contrib:"Developing the execution strategy, establishing the work sequence, leveling equipment and resources across work fronts, and preparing and submitting the tender schedule for the bidding stage.",value:"—",added:"Gaining experience in planning large-scale earthworks across an extensive site, including equipment planning and resource allocation."},
 {c:"ksa",loc:"Alahsa",title:"ALAHSA",sub:"The Rose Alahsa Infrastructure",logo:"p22",owner:"NHC",consultant:"—",contractor:"—",role:"Contractor’s Planning Engineer",scope:"Sewage, stormwater, and water networks, firefighting and irrigation systems, telecom and internet networks, electrical supply and lighting systems, sanitary & storm lift stations, and roadworks.",contrib:"Planning the overall execution strategy, preparing the method statements and activity sequencing, and preparing and submitting the tender schedule.",value:"—",added:"Enhancing knowledge of infrastructure works and gaining further experience in planning and project execution within the expanding Saudi construction market."}
 ];
-
-const NETS = {
-  eg:{
-    nodes:{
-      "Al Alamein":[20,23],"North Coast":[83,51],"Al Dabaa":[128,80],"El Sheikh Zayed":[70,118,"bl"],"6th of October":[181,127],
-      "Badya":[232,160],"10th of Ramadan":[325,184],"Al Giza":[179,201],"Ain Shams":[297,219],"Mostakbal City":[345,252],
-      "New Admin. Capital":[309,284],"Ras Shukeir":[373,344],"Al Qurna":[342,433]
-    },
-    edges:[["Al Alamein","North Coast"],["North Coast","Al Dabaa"],["Al Dabaa","El Sheikh Zayed"],["Al Dabaa","6th of October"],["6th of October","Badya"],["Badya","10th of Ramadan"],["Badya","Al Giza"],["Badya","Ain Shams"],["Ain Shams","Mostakbal City"],["Ain Shams","New Admin. Capital"],["New Admin. Capital","Ras Shukeir"],["Ras Shukeir","Al Qurna"]]
-  },
-  ksa:{
-    nodes:{"Medina":[48,42,"t"],"Riyadh":[183,36],"Alahsa":[238,128]},
-    edges:[["Medina","Riyadh"],["Riyadh","Alahsa"]]
-  }
-};
 
 const $ = s => document.querySelector(s);
 const esc = s => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
@@ -688,32 +693,75 @@ $("#svc").innerHTML=SERVICES.map(([t,d])=>`
   </article>
 `).join("");
 
-/* Interactive location maps */
-document.querySelectorAll(".country").forEach(box=>{
-  const net=NETS[box.dataset.c],N=net.nodes,svg=box.querySelector("svg");
-  const edges=net.edges.map(([a,b])=>`M${N[a][0]} ${N[a][1]} L${N[b][0]} ${N[b][1]}`).join(" ");
-  const nodes=Object.entries(N).map(([name,[x,y,a]])=>{
-    const i=PROJECTS.findIndex(p=>p.loc===name);
-    const tx=a==="bl"?x-50:a==="t"?x-20:x+16;
-    const ty=a==="bl"?y+22:a==="t"?y-16:y+4;
-    return `<g class="node" data-i="${i}" tabindex="0" role="button" aria-label="${esc(name)}">
-      <rect class="halo" x="${x-5}" y="${y-5}" width="10" height="10" transform="rotate(45 ${x} ${y})"/>
-      <rect x="${x-5}" y="${y-5}" width="10" height="10" transform="rotate(45 ${x} ${y})"/>
-      <text x="${tx}" y="${ty}">${esc(name.replace(/^(\d+)th/,"$1ᵗʰ"))}</text>
-    </g>`;
-  }).join("");
-  svg.innerHTML=`<path class="edge" d="${edges}"/><path class="draw" d="${edges}"/>${nodes}`;
-  const draw=svg.querySelector(".draw");
-  draw.style.setProperty("--len",Math.ceil(draw.getTotalLength()));
-  svg.addEventListener("click",e=>{
-    const g=e.target.closest(".node");
-    if(g && +g.dataset.i>=0) openProject(+g.dataset.i);
+/* Interactive geographic project maps (approximate locations) */
+const PROJECT_COORDS = {
+  "Al Alamein":[30.848,28.955],
+  "North Coast":[30.970,28.750],
+  "Al Dabaa":[31.030,28.460],
+  "El Sheikh Zayed":[30.020,30.980],
+  "6th of October":[29.965,30.920],
+  "Badya":[29.965,30.820],
+  "Al Giza":[30.027,31.211],
+  "10th of Ramadan":[30.296,31.742],
+  "Ain Shams":[30.130,31.320],
+  "Mostakbal City":[30.050,31.635],
+  "New Admin. Capital":[30.010,31.750],
+  "Ras Shukeir":[28.130,33.270],
+  "Al Qurna":[25.700,32.630],
+  "Medina":[24.470,39.610],
+  "Riyadh":[24.713,46.675],
+  "Alahsa":[25.380,49.590]
+};
+
+const mapInstances = {};
+function initProjectMap(countryCode, elementId, center, zoom) {
+  const element = document.getElementById(elementId);
+  if (!element || !window.L) return;
+  const map = L.map(element, {scrollWheelZoom:false, zoomControl:true, preferCanvas:true});
+  mapInstances[countryCode] = map;
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom:18,
+    attribution:'&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>'
+  }).addTo(map);
+  map.setView(center, zoom);
+
+  const visible = PROJECTS.map((project, index) => ({project, index}))
+    .filter(item => item.project.c === countryCode);
+  const seenLocations = {};
+  const bounds = [];
+
+  visible.forEach(({project, index}) => {
+    const base = PROJECT_COORDS[project.loc];
+    if (!base) return;
+    const count = seenLocations[project.loc] || 0;
+    seenLocations[project.loc] = count + 1;
+    // Nudge projects sharing a city so each marker remains independently clickable.
+    const angle = count * 2.399963;
+    const radius = count ? 0.018 + count * 0.006 : 0;
+    const lat = base[0] + Math.sin(angle) * radius;
+    const lng = base[1] + Math.cos(angle) * radius;
+    bounds.push([lat, lng]);
+
+    const number = String(index + 1).padStart(2, '0');
+    const icon = L.divIcon({
+      className:'',
+      html:`<div class="project-pin"><span>${number}</span></div>`,
+      iconSize:[24,24],
+      iconAnchor:[12,12]
+    });
+    const marker = L.marker([lat,lng], {icon, keyboard:true, title:project.title.replace(/<[^>]*>/g,'')}).addTo(map);
+    marker.bindTooltip(`${number} · ${project.title.replace(/<[^>]*>/g,'')} — ${project.loc}`, {className:'project-tip', direction:'top', offset:[0,-10]});
+    marker.bindPopup(`<div class="map-popup-title">${project.title}</div><div class="map-popup-meta">${project.loc} · ${project.c === 'eg' ? 'Egypt' : 'Saudi Arabia'}</div><div class="map-popup-action">Select marker to view project details ↗</div>`);
+    marker.on('click', () => openProject(index));
   });
-  svg.addEventListener("keydown",e=>{
-    const g=e.target.closest(".node");
-    if(g && e.key==="Enter" && +g.dataset.i>=0) openProject(+g.dataset.i);
-  });
-});
+  if (bounds.length > 1) map.fitBounds(bounds, {padding:[24,24], maxZoom:8});
+  else if (bounds.length === 1) map.setView(bounds[0], 8);
+  setTimeout(() => map.invalidateSize(), 80);
+}
+
+initProjectMap('eg', 'map-eg', [28.7, 31.5], 5);
+initProjectMap('ksa', 'map-ksa', [24.8, 45.5], 5);
+
 
 /* Project cards and filters */
 const cards=$("#cards");
