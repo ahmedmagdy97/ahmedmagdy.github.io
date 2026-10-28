@@ -396,7 +396,60 @@ nav ul a:hover{color:#344B38}
 .country .big{-webkit-text-stroke:1px #E3E6DE}
 .country .project-map{background:#E8EDE5;border-color:#D8DCD3}
 .country .leaflet-container{background:#E8EDE5;color:#242923}
-.country .leaflet-tile{filter:none}
+/* Warm, muted green basemap */
+.country .project-map {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: #e8ede5;
+}
+
+.country .leaflet-container {
+  width: 100%;
+  height: 100%;
+  font-family: var(--display);
+  background: #e8ede5;
+  color: #242923;
+}
+
+.country .leaflet-tile-pane {
+  opacity: 1;
+}
+
+.country .leaflet-tile {
+  filter: sepia(.16) saturate(.72) hue-rotate(32deg)
+          brightness(1.02) contrast(.94);
+}
+.country .leaflet-overlay-pane,
+.country .leaflet-marker-pane,
+.country .leaflet-tooltip-pane,
+.country .leaflet-popup-pane,
+.country .leaflet-control-container {
+  z-index: auto;
+}
+
+.country .leaflet-control-attribution {
+  background: rgba(245,242,234,.92) !important;
+  color: #596258 !important;
+  font-size: 9px;
+}
+
+.country .leaflet-control-attribution a {
+  color: #55745b !important;
+}
+
+.country .leaflet-control-zoom a {
+  background: #f5f2ea !important;
+  color: #344b38 !important;
+  border-color: #d8dcd3 !important;
+}
+
+@media (max-width: 600px) {
+  .country .project-map {
+    height: 320px;
+    min-height: 320px;
+  }
+}
 .country .leaflet-control-attribution{background:rgba(255,255,255,.9)!important;color:#596258!important}
 .country .leaflet-control-attribution a{color:#55745B!important}
 .country .leaflet-control-zoom a{background:#FFFFFF!important;color:#344B38!important;border-color:#D8DCD3!important}
@@ -912,7 +965,29 @@ function initProjectMap(countryCode, elementId, center, zoom) {
   // Enable mouse dragging and wheel zoom on the map under the cursor.
   const map = L.map(element, {dragging:true, scrollWheelZoom:true, zoomControl:true, touchZoom:true, doubleClickZoom:true, boxZoom:true, keyboard:true, preferCanvas:true});
   mapInstances[countryCode] = map;
-  // Voyager basemap generally provides English-facing labels while retaining geographic detail.
+  // OpenStreetMap basemap with warm-green styling applied through CSS.
+const baseLayer = L.tileLayer(
+  'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+  {
+    maxZoom: 19,
+    attribution:
+      '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a>',
+    errorTileUrl: '',
+    keepBuffer: 4,
+    updateWhenIdle: true
+  }
+).addTo(map);
+
+map.setView(center, zoom);
+
+// Ensure tiles render at the correct dimensions.
+requestAnimationFrame(() => {
+  map.invalidateSize({ pan: false });
+});
+
+baseLayer.on('tileerror', function (event) {
+  console.warn('Map tile failed to load:', event.tile?.src);
+});
   L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
     maxZoom:19,
     attribution:'&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a>'
@@ -947,8 +1022,31 @@ function initProjectMap(countryCode, elementId, center, zoom) {
   setTimeout(() => map.invalidateSize(), 80);
 }
 
-initProjectMap('eg', 'map-eg', [28.7, 31.5], 5);
-initProjectMap('ksa', 'map-ksa', [24.8, 45.5], 5);
+function initializePortfolioMaps() {
+  initProjectMap('eg', 'map-eg', [28.7, 31.5], 5);
+  initProjectMap('ksa', 'map-ksa', [24.8, 45.5], 5);
+
+  // Recalculate map dimensions after layout changes.
+  requestAnimationFrame(() => {
+    Object.values(mapInstances).forEach(map => {
+      map.invalidateSize({ pan: false });
+    });
+  });
+}
+
+if (document.readyState === 'complete') {
+  initializePortfolioMaps();
+} else {
+  window.addEventListener('load', initializePortfolioMaps, {
+    once: true
+  });
+}
+
+window.addEventListener('resize', () => {
+  Object.values(mapInstances).forEach(map => {
+    map.invalidateSize({ pan: false });
+  });
+});
 
 
 /* Project cards and filters */
