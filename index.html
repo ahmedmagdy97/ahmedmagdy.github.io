@@ -961,67 +961,134 @@ const PROJECT_COORDS = [
 ];
 
 const mapInstances = {};
+
 function initProjectMap(countryCode, elementId, center, zoom) {
   const element = document.getElementById(elementId);
   if (!element || !window.L) return;
-  // Enable mouse dragging and wheel zoom on the map under the cursor.
-  const map = L.map(element, {dragging:true, scrollWheelZoom:true, zoomControl:true, touchZoom:true, doubleClickZoom:true, boxZoom:true, keyboard:true, preferCanvas:true});
+
+  const map = L.map(element, {
+    dragging: true,
+    scrollWheelZoom: true,
+    zoomControl: true,
+    touchZoom: true,
+    doubleClickZoom: true,
+    boxZoom: true,
+    keyboard: true,
+    preferCanvas: true
+  });
+
   mapInstances[countryCode] = map;
-  // OpenStreetMap basemap with warm-green styling applied through CSS.
-const baseLayer = L.tileLayer(
-  'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-  {
-    maxZoom: 19,
-    attribution:
-      '© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a>',
-    errorTileUrl: '',
-    keepBuffer: 4,
-    updateWhenIdle: true
-  }
-).addTo(map);
 
-map.setView(center, zoom);
+  // CARTO Voyager raster tiles using your API key.
+  // Only one basemap is loaded to avoid duplicate tile requests.
+  const baseLayer = L.tileLayer(
+    'https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png?key=cb1_4w89_1_a4207b9ec8bf1d406131ac20',
+    {
+      maxZoom: 19,
+      attribution:
+        '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a> &copy; <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a>',
+      keepBuffer: 4,
+      updateWhenIdle: true
+    }
+  ).addTo(map);
 
-// Ensure tiles render at the correct dimensions.
-requestAnimationFrame(() => {
-  map.invalidateSize({ pan: false });
-});
-
-baseLayer.on('tileerror', function (event) {
-  console.warn('Map tile failed to load:', event.tile?.src);
-});
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-    maxZoom:19,
-    attribution:'© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> © <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a>'
-  }).addTo(map);
   map.setView(center, zoom);
 
-  const visible = PROJECTS.map((project, index) => ({project, index}))
+  requestAnimationFrame(() => {
+    map.invalidateSize({ pan: false });
+  });
+
+  baseLayer.on('tileerror', function (event) {
+    console.warn('CARTO map tile failed to load:', event.tile?.src);
+  });
+
+  // Display only projects belonging to this country.
+  const visible = PROJECTS
+    .map((project, index) => ({ project, index }))
     .filter(item => item.project.c === countryCode);
+
   const bounds = [];
 
-  visible.forEach(({project, index}) => {
+  visible.forEach(({ project, index }) => {
     const point = PROJECT_COORDS[index];
     if (!point) return;
-    const lat = point[0], lng = point[1];
+
+    const lat = point[0];
+    const lng = point[1];
+
     bounds.push([lat, lng]);
 
     const number = String(index + 1).padStart(2, '0');
+
     const icon = L.divIcon({
-      className:'',
-      html:`<div class="project-pin"><svg viewBox="0 0 30 38" aria-hidden="true"><path d="M15 37 C12.8 32.4 2 21.1 2 14.5 A13 13 0 1 1 28 14.5 C28 21.1 17.2 32.4 15 37Z" fill="#D4AF62" stroke="#FFF0BF" stroke-width="1.2"/><circle cx="15" cy="14.5" r="8.5" fill="#080808" stroke="#FFF0BF" stroke-width=".7"/></svg><span>${number}</span></div>`,
-      iconSize:[30,38],
-      iconAnchor:[15,37]
+      className: '',
+      html: `
+        <div class="project-pin">
+          <svg viewBox="0 0 30 38" aria-hidden="true">
+            <path
+              d="M15 37 C12.8 32.4 2 21.1 2 14.5 A13 13 0 1 1 28 14.5 C28 21.1 17.2 32.4 15 37Z"
+              fill="#D4AF62"
+              stroke="#FFF0BF"
+              stroke-width="1.2"
+            />
+            <circle
+              cx="15"
+              cy="14.5"
+              r="8.5"
+              fill="#080808"
+              stroke="#FFF0BF"
+              stroke-width=".7"
+            />
+          </svg>
+          <span>${number}</span>
+        </div>
+      `,
+      iconSize: [30, 38],
+      iconAnchor: [15, 37]
     });
-    const cleanTitle = project.title.replace(/<[^>]*>/g,'');
-    const marker = L.marker([lat,lng], {icon, keyboard:true, title:cleanTitle}).addTo(map);
-    marker.bindTooltip(`${number} · ${cleanTitle} — ${project.loc}`, {className:'project-tip', direction:'top', offset:[0,-34]});
-    marker.bindPopup(`<div class="map-popup-title">${cleanTitle}</div><div class="map-popup-meta">${project.loc} · ${project.c === 'eg' ? 'Egypt' : 'Saudi Arabia'}</div><div class="map-popup-action">Select marker to view project details ↗</div>`);
+
+    const cleanTitle = project.title.replace(/<[^>]*>/g, '');
+
+    const marker = L.marker([lat, lng], {
+      icon,
+      keyboard: true,
+      title: cleanTitle
+    }).addTo(map);
+
+    marker.bindTooltip(
+      `${number} · ${cleanTitle} — ${project.loc}`,
+      {
+        className: 'project-tip',
+        direction: 'top',
+        offset: [0, -34]
+      }
+    );
+
+    marker.bindPopup(`
+      <div class="map-popup-title">${cleanTitle}</div>
+      <div class="map-popup-meta">
+        ${project.loc} · ${project.c === 'eg' ? 'Egypt' : 'Saudi Arabia'}
+      </div>
+      <div class="map-popup-action">
+        Select marker to view project details ↗
+      </div>
+    `);
+
     marker.on('click', () => openProject(index));
   });
-  if (bounds.length > 1) map.fitBounds(bounds, {padding:[24,24], maxZoom:8});
-  else if (bounds.length === 1) map.setView(bounds[0], 8);
-  setTimeout(() => map.invalidateSize(), 80);
+
+  if (bounds.length > 1) {
+    map.fitBounds(bounds, {
+      padding: [24, 24],
+      maxZoom: 8
+    });
+  } else if (bounds.length === 1) {
+    map.setView(bounds[0], 8);
+  }
+
+  setTimeout(() => {
+    map.invalidateSize();
+  }, 80);
 }
 
 function initializePortfolioMaps() {
