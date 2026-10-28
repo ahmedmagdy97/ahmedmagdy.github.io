@@ -422,13 +422,14 @@ nav ul a:hover{color:#344B38}
   filter: sepia(.16) saturate(.72) hue-rotate(32deg)
           brightness(1.02) contrast(.94);
 }
-.country .leaflet-overlay-pane,
-.country .leaflet-marker-pane,
-.country .leaflet-tooltip-pane,
-.country .leaflet-popup-pane,
-.country .leaflet-control-container {
-  z-index: auto;
-}
+/* Preserve Leaflet's layer order so markers stay visible above map tiles. */
+.country .leaflet-tile-pane { z-index: 200; }
+.country .leaflet-overlay-pane { z-index: 400; }
+.country .leaflet-shadow-pane { z-index: 500; }
+.country .leaflet-marker-pane { z-index: 600; }
+.country .leaflet-tooltip-pane { z-index: 650; }
+.country .leaflet-popup-pane { z-index: 700; }
+.country .leaflet-control-container { z-index: 800; }
 
 .country .leaflet-control-attribution {
   background: rgba(245,242,234,.92) !important;
