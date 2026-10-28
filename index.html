@@ -28,10 +28,9 @@
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{font-family:var(--display);background:var(--bg);color:var(--text);line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-a{color:inherit}\
+a{color:inherit}
 ::selection{background:#e6e6e6;color:#000}
-
-body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:100;opacity:.045;background-image:url("data:image/svg+xml,%3Csvg xmlns='http__codex_directive_quoted_backslash__://www__codex_directive_quoted_backslash__.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:100;opacity:.045;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 .mono{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--soft)}
 .silver{background:var(--silver);-webkit-background-clip:text;background-clip:text;color:transparent}
 .chrome{background:var(--chrome);background-size:250% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 7s linear infinite}
@@ -232,7 +231,7 @@ nav ul a:hover{color:#fff}
 .net .node:hover text{fill:#fff}
 @keyframes pulse{0%{opacity:.6;transform:rotate(45deg) scale(1)}100%{opacity:0;transform:rotate(45deg) scale(3)}}
 .country .big{position:absolute;right:-10px;bottom:-30px;font-weight:900;font-size:200px;line-height:1;color:transparent;-webkit-text-stroke:1px #1a1a1a;pointer-events:none}
-.country .project-map{height:390px;min-height:390px;width:100%;margin-top:20px;background:#101010;border:1px solid #242424;z-index:1;flex:none}
+.country .project-map{height:360px;min-height:360px;max-height:360px;width:100%;margin-top:20px;background:#101010;border:1px solid #242424;z-index:0;flex:0 0 360px;overflow:hidden;position:relative;isolation:isolate;contain:layout paint}
 .country .leaflet-container{font-family:var(--display);background:#101010;color:var(--text)}
 .country .leaflet-tile{filter:grayscale(1) invert(.88) brightness(.72) contrast(.9)}
 .country .leaflet-control-attribution{background:rgba(0,0,0,.72)!important;color:#888!important;font-size:9px}
@@ -248,7 +247,7 @@ nav ul a:hover{color:#fff}
 .map-popup-title{font-weight:900;text-transform:uppercase;font-size:13px;margin-bottom:5px}
 .map-popup-meta{font:10px var(--mono);letter-spacing:.06em;color:#c9b16f;text-transform:uppercase}
 .map-popup-action{display:inline-block;margin-top:9px;color:#f0d994;font:10px var(--mono);letter-spacing:.12em;text-transform:uppercase}
-@media(max-width:600px){.country{padding:22px}.country h3{font-size:clamp(18px,5.1vw,30px);white-space:normal}.country .project-map{height:320px;min-height:320px}}
+@media(max-width:600px){.country{padding:22px}.country h3{font-size:clamp(18px,5.1vw,30px);white-space:normal}.country .project-map{height:300px;min-height:300px;max-height:300px;flex-basis:300px}}
 
 .tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:40px}
 .tabs button{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;padding:12px 18px;border:1px solid #2c2c2c;background:transparent;color:#9a9a9a;cursor:pointer;transition:.25s}
@@ -348,9 +347,8 @@ footer{color:#555;padding:26px var(--pad);border-top:1px solid #161616;display:f
   --silver:linear-gradient(135deg,#344B38 0%,#55745B 55%,#78917A 100%);
   --chrome:linear-gradient(100deg,#344B38 0%,#55745B 45%,#78917A 70%,#55745B 100%);
 }
-body{background:#F5F2EA;color:#242923}\
+body{background:#F5F2EA;color:#242923}
 ::selection{background:#55745B;color:#FFFFFF}
-
 body::after{opacity:.018}
 .grid-bg{background-image:repeating-linear-gradient(90deg,rgba(36,41,35,.035) 0 1px,transparent 1px calc(100%/14))}
 #loader{background:#F5F2EA}
@@ -398,61 +396,7 @@ nav ul a:hover{color:#344B38}
 .country .big{-webkit-text-stroke:1px #E3E6DE}
 .country .project-map{background:#E8EDE5;border-color:#D8DCD3}
 .country .leaflet-container{background:#E8EDE5;color:#242923}
-/* Warm, muted green basemap */
-.country .project-map {
-  position: relative;
-  isolation: isolate;
-  overflow: hidden;
-  background: #e8ede5;
-}
-
-.country .leaflet-container {
-  width: 100%;
-  height: 100%;
-  font-family: var(--display);
-  background: #e8ede5;
-  color: #242923;
-}
-
-.country .leaflet-tile-pane {
-  opacity: 1;
-}
-
-.country .leaflet-tile {
-  filter: sepia(.16) saturate(.72) hue-rotate(32deg)
-          brightness(1.02) contrast(.94);
-}
-/* Preserve Leaflet's layer order so markers stay visible above map tiles. */
-.country .leaflet-tile-pane { z-index: 200; }
-.country .leaflet-overlay-pane { z-index: 400; }
-.country .leaflet-shadow-pane { z-index: 500; }
-.country .leaflet-marker-pane { z-index: 600; }
-.country .leaflet-tooltip-pane { z-index: 650; }
-.country .leaflet-popup-pane { z-index: 700; }
-.country .leaflet-control-container { z-index: 800; }
-
-.country .leaflet-control-attribution {
-  background: rgba(245,242,234,.92) !important;
-  color: #596258 !important;
-  font-size: 9px;
-}
-
-.country .leaflet-control-attribution a {
-  color: #55745b !important;
-}
-
-.country .leaflet-control-zoom a {
-  background: #f5f2ea !important;
-  color: #344b38 !important;
-  border-color: #d8dcd3 !important;
-}
-
-@media (max-width: 600px) {
-  .country .project-map {
-    height: 320px;
-    min-height: 320px;
-  }
-}
+.country .leaflet-tile{filter:none}
 .country .leaflet-control-attribution{background:rgba(255,255,255,.9)!important;color:#596258!important}
 .country .leaflet-control-attribution a{color:#55745B!important}
 .country .leaflet-control-zoom a{background:#FFFFFF!important;color:#344B38!important;border-color:#D8DCD3!important}
@@ -494,6 +438,47 @@ dl dt::before{background:#55745B}
 .c-grid dd a{background-image:linear-gradient(#55745B,#55745B)}
 footer{color:#687067;border-color:#D8DCD3}
 @media(prefers-reduced-motion:reduce){body::after{display:none}}
+
+/* Map containment fix: keep each interactive map within its country card. */
+.country {
+  position: relative;
+  isolation: isolate;
+  min-width: 0;
+}
+.country .project-map {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 360px;
+  min-height: 360px;
+  max-height: 360px;
+  flex: 0 0 360px;
+  overflow: hidden;
+  isolation: isolate;
+  contain: layout paint;
+  z-index: 0;
+}
+.country .project-map .leaflet-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+  overflow: hidden;
+  z-index: 0;
+}
+.country .project-map .leaflet-pane,
+.country .project-map .leaflet-top,
+.country .project-map .leaflet-bottom {
+  max-width: 100%;
+}
+@media (max-width: 600px) {
+  .country .project-map {
+    height: 300px;
+    min-height: 300px;
+    max-height: 300px;
+    flex-basis: 300px;
+  }
+}
 
 
 
@@ -577,6 +562,21 @@ nav ul a{font-weight:700}
   transition-delay: calc(var(--svc-delay, 0s) + .25s);
 }
 
+
+/* Final map containment safeguards: Leaflet must remain inside each country card. */
+.country { position: relative; isolation: isolate; min-width: 0; overflow: hidden; }
+.country .project-map {
+  position: relative; display: block; width: 100%; height: 360px;
+  min-height: 360px; max-height: 360px; flex: 0 0 360px;
+  overflow: hidden; isolation: isolate; contain: layout paint; z-index: 0;
+}
+.country .project-map .leaflet-container {
+  position: relative; width: 100%; height: 100%; max-height: 100%;
+  overflow: hidden; z-index: 0;
+}
+@media (max-width: 600px) {
+  .country .project-map { height: 300px; min-height: 300px; max-height: 300px; flex-basis: 300px; }
+}
 </style>
 </head>
 
@@ -627,7 +627,7 @@ nav ul a{font-weight:700}
         <ul class="projects">
           <li>Al Jawhara – The New Administrative Capital</li>
         </ul>
-        <span class="company">Dream for Contracting, Supplies, & Real Estate</span>
+        <span class="company">Dream for Contracting, Supplies, &amp; Real Estate</span>
       </div>
       <div class="stop">
         <span class="date">May 2022 – Dec 2022</span>
@@ -780,7 +780,7 @@ const PROJECTS = [
 ];
 
 const $ = s => document.querySelector(s);
-const esc = s => String(s).replace(/&/g,"&").replace(/</g,"<").replace(/>/g,">");
+const esc = s => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
 const pad2 = n => String(n).padStart(2,"0");
 const label = p => (p.c === "eg" ? "Egypt" : "KSA") + " — Project " + pad2(PROJECTS.filter(q => q.c === p.c).indexOf(p) + 1);
 const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -962,161 +962,63 @@ const PROJECT_COORDS = [
 ];
 
 const mapInstances = {};
-
 function initProjectMap(countryCode, elementId, center, zoom) {
   const element = document.getElementById(elementId);
   if (!element || !window.L) return;
-
+  // Enable mouse dragging and wheel zoom on the map under the cursor.
   const map = L.map(element, {
     dragging: true,
-    scrollWheelZoom: true,
+    scrollWheelZoom: false,
     zoomControl: true,
     touchZoom: true,
-    doubleClickZoom: true,
+    doubleClickZoom: false,
     boxZoom: true,
     keyboard: true,
-    preferCanvas: true
+    preferCanvas: true,
+    zoomSnap: 1,
+    minZoom: 3,
+    maxZoom: 8
   });
-
   mapInstances[countryCode] = map;
-
-  // CARTO Voyager raster tiles using your API key.
-  // Only one basemap is loaded to avoid duplicate tile requests.
-  const baseLayer = L.tileLayer(
-    'https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png?key=cb1_4w89_1_a4207b9ec8bf1d406131ac20',
-    {
-      maxZoom: 19,
-      attribution:
-        '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a> &copy; <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a>',
-      keepBuffer: 4,
-      updateWhenIdle: true
-    }
-  ).addTo(map);
-
+  // Voyager basemap generally provides English-facing labels while retaining geographic detail.
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+    maxZoom:8,
+    attribution:'&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a>'
+  }).addTo(map);
   map.setView(center, zoom);
 
-  requestAnimationFrame(() => {
-    map.invalidateSize({ pan: false });
-  });
-
-  baseLayer.on('tileerror', function (event) {
-    console.warn('CARTO map tile failed to load:', event.tile?.src);
-  });
-
-  // Display only projects belonging to this country.
-  const visible = PROJECTS
-    .map((project, index) => ({ project, index }))
+  const visible = PROJECTS.map((project, index) => ({project, index}))
     .filter(item => item.project.c === countryCode);
-
   const bounds = [];
 
-  visible.forEach(({ project, index }) => {
+  visible.forEach(({project, index}) => {
     const point = PROJECT_COORDS[index];
     if (!point) return;
-
-    const lat = point[0];
-    const lng = point[1];
-
+    const lat = point[0], lng = point[1];
     bounds.push([lat, lng]);
 
     const number = String(index + 1).padStart(2, '0');
-
     const icon = L.divIcon({
-      className: '',
-      html: `
-        <div class="project-pin">
-          <svg viewBox="0 0 30 38" aria-hidden="true">
-            <path
-              d="M15 37 C12.8 32.4 2 21.1 2 14.5 A13 13 0 1 1 28 14.5 C28 21.1 17.2 32.4 15 37Z"
-              fill="#D4AF62"
-              stroke="#FFF0BF"
-              stroke-width="1.2"
-            />
-            <circle
-              cx="15"
-              cy="14.5"
-              r="8.5"
-              fill="#080808"
-              stroke="#FFF0BF"
-              stroke-width=".7"
-            />
-          </svg>
-          <span>${number}</span>
-        </div>
-      `,
-      iconSize: [30, 38],
-      iconAnchor: [15, 37]
+      className:'',
+      html:`<div class="project-pin"><svg viewBox="0 0 30 38" aria-hidden="true"><path d="M15 37 C12.8 32.4 2 21.1 2 14.5 A13 13 0 1 1 28 14.5 C28 21.1 17.2 32.4 15 37Z" fill="#D4AF62" stroke="#FFF0BF" stroke-width="1.2"/><circle cx="15" cy="14.5" r="8.5" fill="#080808" stroke="#FFF0BF" stroke-width=".7"/></svg><span>${number}</span></div>`,
+      iconSize:[30,38],
+      iconAnchor:[15,37]
     });
-
-    const cleanTitle = project.title.replace(/<[^>]*>/g, '');
-
-    const marker = L.marker([lat, lng], {
-      icon,
-      keyboard: true,
-      title: cleanTitle
-    }).addTo(map);
-
-    marker.bindTooltip(
-      `${number} · ${cleanTitle} — ${project.loc}`,
-      {
-        className: 'project-tip',
-        direction: 'top',
-        offset: [0, -34]
-      }
-    );
-
-    marker.bindPopup(`
-      <div class="map-popup-title">${cleanTitle}</div>
-      <div class="map-popup-meta">
-        ${project.loc} · ${project.c === 'eg' ? 'Egypt' : 'Saudi Arabia'}
-      </div>
-      <div class="map-popup-action">
-        Select marker to view project details ↗
-      </div>
-    `);
-
+    const cleanTitle = project.title.replace(/<[^>]*>/g,'');
+    const marker = L.marker([lat,lng], {icon, keyboard:true, title:cleanTitle}).addTo(map);
+    marker.bindTooltip(`${number} · ${cleanTitle} — ${project.loc}`, {className:'project-tip', direction:'top', offset:[0,-34]});
+    marker.bindPopup(`<div class="map-popup-title">${cleanTitle}</div><div class="map-popup-meta">${project.loc} · ${project.c === 'eg' ? 'Egypt' : 'Saudi Arabia'}</div><div class="map-popup-action">Select marker to view project details ↗</div>`);
     marker.on('click', () => openProject(index));
   });
-
-  if (bounds.length > 1) {
-    map.fitBounds(bounds, {
-      padding: [24, 24],
-      maxZoom: 8
-    });
-  } else if (bounds.length === 1) {
-    map.setView(bounds[0], 8);
-  }
-
-  setTimeout(() => {
-    map.invalidateSize();
-  }, 80);
-}
-
-function initializePortfolioMaps() {
-  initProjectMap('eg', 'map-eg', [28.7, 31.5], 5);
-  initProjectMap('ksa', 'map-ksa', [24.8, 45.5], 5);
-
-  // Recalculate map dimensions after layout changes.
+  if (bounds.length > 1) map.fitBounds(bounds, {padding:[24,24], maxZoom:8});
+  else if (bounds.length === 1) map.setView(bounds[0], 8);
   requestAnimationFrame(() => {
-    Object.values(mapInstances).forEach(map => {
-      map.invalidateSize({ pan: false });
-    });
-  });
-}
-
-if (document.readyState === 'complete') {
-  initializePortfolioMaps();
-} else {
-  window.addEventListener('load', initializePortfolioMaps, {
-    once: true
-  });
-}
-
-window.addEventListener('resize', () => {
-  Object.values(mapInstances).forEach(map => {
     map.invalidateSize({ pan: false });
   });
-});
+}
+
+initProjectMap('eg', 'map-eg', [28.7, 31.5], 5);
+initProjectMap('ksa', 'map-ksa', [24.8, 45.5], 5);
 
 
 /* Project cards and filters */
@@ -1238,4 +1140,4 @@ addEventListener("scroll",onScroll,{passive:true});
 onScroll();
 </script>
 </body>
-</html>\
+</html>
