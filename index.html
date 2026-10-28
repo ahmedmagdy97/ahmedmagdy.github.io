@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#F5F2EA">
+<meta name="theme-color" content="#000000">
 <title>Ahmed Magdy — Project Controls and Planning</title>
 <meta name="description" content="Ahmed Magdy — Project Controls and Planning. Planning, scheduling, delay analysis and project controls for international projects.">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
@@ -231,15 +231,35 @@ nav ul a:hover{color:#fff}
 .net .node:hover text{fill:#fff}
 @keyframes pulse{0%{opacity:.6;transform:rotate(45deg) scale(1)}100%{opacity:0;transform:rotate(45deg) scale(3)}}
 .country .big{position:absolute;right:-10px;bottom:-30px;font-weight:900;font-size:200px;line-height:1;color:transparent;-webkit-text-stroke:1px #1a1a1a;pointer-events:none}
-.country .project-map{height:360px;min-height:360px;max-height:360px;width:100%;margin-top:20px;background:#101010;border:1px solid #242424;z-index:0;flex:0 0 360px;overflow:hidden;position:relative;isolation:isolate;contain:layout paint}
+.country .project-map{height:390px;min-height:390px;width:100%;margin-top:20px;background:#101010;border:1px solid #242424;z-index:1;flex:none}
 .country .leaflet-container{font-family:var(--display);background:#101010;color:var(--text)}
 .country .leaflet-tile{filter:grayscale(1) invert(.88) brightness(.72) contrast(.9)}
 .country .leaflet-control-attribution{background:rgba(0,0,0,.72)!important;color:#888!important;font-size:9px}
 .country .leaflet-control-attribution a{color:#c9b16f!important}
 .country .leaflet-control-zoom a{background:#111!important;color:#e9e9e9!important;border-color:#333!important}
-.project-pin{position:relative;width:30px;height:38px;filter:drop-shadow(0 2px 5px rgba(230,199,121,.32))}
-.project-pin svg{display:block;width:30px;height:38px;overflow:visible}
-.project-pin span{position:absolute;top:5px;left:0;width:30px;text-align:center;color:#080808;font:700 8px var(--mono);line-height:16px;pointer-events:none}
+.project-pin{
+  position:relative;
+  width:30px;
+  height:38px;
+  filter:none;
+}
+.project-pin svg{
+  display:block;
+  width:30px;
+  height:38px;
+  overflow:visible;
+}
+.project-pin span{
+  position:absolute;
+  top:5px;
+  left:0;
+  width:30px;
+  text-align:center;
+  color:#080808;
+  font:700 8px var(--mono);
+  line-height:16px;
+  pointer-events:none;
+}
 .leaflet-tooltip.project-tip{background:#080808;border:1px solid #4a3b22;border-radius:0;color:#f3ede0;font:10px var(--mono);letter-spacing:.06em;text-transform:uppercase;box-shadow:none;padding:6px 8px}
 .leaflet-tooltip.project-tip:before{border-top-color:#4a3b22}
 .leaflet-popup-content-wrapper,.leaflet-popup-tip{background:#101010;color:#f3ede0;border:1px solid #3a3020;border-radius:0;box-shadow:0 8px 30px #000}
@@ -247,7 +267,7 @@ nav ul a:hover{color:#fff}
 .map-popup-title{font-weight:900;text-transform:uppercase;font-size:13px;margin-bottom:5px}
 .map-popup-meta{font:10px var(--mono);letter-spacing:.06em;color:#c9b16f;text-transform:uppercase}
 .map-popup-action{display:inline-block;margin-top:9px;color:#f0d994;font:10px var(--mono);letter-spacing:.12em;text-transform:uppercase}
-@media(max-width:600px){.country{padding:22px}.country h3{font-size:clamp(18px,5.1vw,30px);white-space:normal}.country .project-map{height:300px;min-height:300px;max-height:300px;flex-basis:300px}}
+@media(max-width:600px){.country{padding:22px}.country h3{font-size:clamp(18px,5.1vw,30px);white-space:normal}.country .project-map{height:320px;min-height:320px}}
 
 .tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:40px}
 .tabs button{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;padding:12px 18px;border:1px solid #2c2c2c;background:transparent;color:#9a9a9a;cursor:pointer;transition:.25s}
@@ -333,282 +353,6 @@ footer{color:#555;padding:26px var(--pad);border-top:1px solid #161616;display:f
   .reveal{opacity:1;transform:none}
   #hero h1 span i{transform:none}
 }
-
-
-/* Warm ivory & forest green — light, document-like visual identity */
-:root{
-  color-scheme:light;
-  --bg:#F5F2EA;
-  --bg-2:#FFFFFF;
-  --edge:#D8DCD3;
-  --text:#242923;
-  --soft:#687067;
-  --dim:#7A8378;
-  --silver:linear-gradient(135deg,#344B38 0%,#55745B 55%,#78917A 100%);
-  --chrome:linear-gradient(100deg,#344B38 0%,#55745B 45%,#78917A 70%,#55745B 100%);
-}
-body{background:#F5F2EA;color:#242923}
-::selection{background:#55745B;color:#FFFFFF}
-body::after{opacity:.018}
-.grid-bg{background-image:repeating-linear-gradient(90deg,rgba(36,41,35,.035) 0 1px,transparent 1px calc(100%/14))}
-#loader{background:#F5F2EA}
-#loader .track{background:#D8DCD3}
-#progress i{background:var(--chrome)}
-#progress span,.mono{color:#687067}
-nav.solid{background:rgba(245,242,234,.94);border-bottom:1px solid #D8DCD3;box-shadow:0 4px 18px rgba(36,41,35,.04)}
-nav ul a{color:#687067}
-nav ul a:hover{color:#344B38}
-.diamond{background:var(--silver)}
-#spot{background:radial-gradient(500px circle at var(--x,70%) var(--y,30%),rgba(85,116,91,.12),transparent 60%)}
-.hero-foot .role{color:#596258}
-.marquee{border-color:#D8DCD3;background:#FFFFFF}
-.marquee::before{background:linear-gradient(90deg,#FFFFFF,transparent)}
-.marquee::after{background:linear-gradient(-90deg,#FFFFFF,transparent)}
-.marquee span{color:#8B9288}
-.marquee span:hover{color:#344B38}
-.marquee em{background:#55745B}
-.statement span{color:#B8BEB5}
-.statement span.lit{color:#344B38}
-.stats{background:#D8DCD3;border-color:#D8DCD3}
-.stats div{background:#FFFFFF}
-.freelance p{color:#596258}
-.journey .line::before{border-color:#C6CCC3}
-.journey .line::after{background:var(--chrome)}
-.journey .stop{color:#687067}
-.journey .position,.journey .company{color:#344B38}
-.journey .projects li{color:#596258}
-.journey .projects li::before{background:#55745B}
-.journey .company{border-color:#D8DCD3}
-.journey .stop .diamond{background:#D8DCD3}
-.journey .stop .date{color:#55745B}
-.journey .stop.on{color:#242923}
-.journey .stop.on .diamond{background:var(--silver);box-shadow:0 0 14px rgba(85,116,91,.18)}
-.journey em{border-color:#AAB3A8;color:#344B38}
-.svc{border-color:#D8DCD3}
-.svc-row{border-color:#D8DCD3}
-.svc-row h3{color:#344B38}
-.svc-row p{color:#596258}
-.svc-row:hover h3{color:#55745B}
-.where{color:#242923}
-.country{border-color:#D8DCD3;background:linear-gradient(180deg,#FFFFFF,#F5F2EA)}
-.country h3{color:#344B38}
-.country .meta b{color:#344B38}
-.country .big{-webkit-text-stroke:1px #E3E6DE}
-.country .project-map{background:#E8EDE5;border-color:#D8DCD3}
-.country .leaflet-container{background:#E8EDE5;color:#242923}
-.country .leaflet-tile{filter:none}
-.country .leaflet-control-attribution{background:rgba(255,255,255,.9)!important;color:#596258!important}
-.country .leaflet-control-attribution a{color:#55745B!important}
-.country .leaflet-control-zoom a{background:#FFFFFF!important;color:#344B38!important;border-color:#D8DCD3!important}
-.project-pin span{color:#242923}
-.leaflet-tooltip.project-tip{background:#FFFFFF;border-color:#55745B;color:#242923}
-.leaflet-tooltip.project-tip:before{border-top-color:#55745B}
-.leaflet-popup-content-wrapper,.leaflet-popup-tip{background:#FFFFFF;color:#242923;border-color:#D8DCD3;box-shadow:0 8px 30px rgba(36,41,35,.14)}
-.map-popup-meta{color:#55745B}
-.map-popup-action{color:#55745B}
-.tabs button{border-color:#C6CCC3;color:#596258}
-.tabs button:hover{border-color:#55745B;color:#344B38}
-.tabs button.on{background:var(--chrome);border-color:#55745B;color:#FFFFFF}
-.card{background:linear-gradient(160deg,#FFFFFF,#F8F7F2);border-color:#D8DCD3;color:#242923}
-.card::before{background:radial-gradient(400px circle at var(--mx,50%) var(--my,50%),rgba(85,116,91,.10),transparent 50%)}
-.card:hover{border-color:#8BA08D}
-.card .tag{color:#687067}
-.card h4{color:#242923}
-.card .sub{color:#687067}
-.card .foot{border-color:#D8DCD3;color:#687067}
-.card .more{color:#55745B}
-dialog{background:#FFFFFF;color:#242923;border-color:#D8DCD3;box-shadow:0 20px 70px rgba(36,41,35,.16)}
-dialog::backdrop{background:rgba(36,41,35,.38);backdrop-filter:blur(4px)}
-.m-head{border-color:#D8DCD3}
-.m-head .sub{color:#687067}
-.m-side{background:#F5F2EA;border-color:#D8DCD3}
-dl dt{color:#687067}
-dl dt::before{background:#55745B}
-.m-side dd{color:#242923}
-.m-main dd{color:#596258}
-.m-main dd.val{background:var(--silver);-webkit-background-clip:text;background-clip:text;color:transparent}
-.m-nav{border-color:#D8DCD3}
-.m-nav button{color:#596258}
-.m-nav button+button{border-color:#D8DCD3}
-.m-nav button:hover{background:#F5F2EA;color:#344B38}
-.close{color:#344B38}
-.close:hover{color:#55745B}
-.c-grid{border-color:#D8DCD3}
-.c-grid .role{color:#596258}
-.c-grid dd a{background-image:linear-gradient(#55745B,#55745B)}
-footer{color:#687067;border-color:#D8DCD3}
-@media(prefers-reduced-motion:reduce){body::after{display:none}}
-
-/* Map containment fix: keep each interactive map within its country card. */
-.country {
-  position: relative;
-  isolation: isolate;
-  min-width: 0;
-}
-.country .project-map {
-  position: relative;
-  display: block;
-  width: 100%;
-  height: 360px;
-  min-height: 360px;
-  max-height: 360px;
-  flex: 0 0 360px;
-  overflow: hidden;
-  isolation: isolate;
-  contain: layout paint;
-  z-index: 0;
-}
-.country .project-map .leaflet-container {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  max-height: 100%;
-  overflow: hidden;
-  z-index: 0;
-}
-.country .project-map .leaflet-pane,
-.country .project-map .leaflet-top,
-.country .project-map .leaflet-bottom {
-  max-width: 100%;
-}
-@media (max-width: 600px) {
-  .country .project-map {
-    height: 300px;
-    min-height: 300px;
-    max-height: 300px;
-    flex-basis: 300px;
-  }
-}
-
-
-
-/* Targeted typography refinements requested */
-/* Hero role and profile statement use the primary dark text color. */
-.hero-foot .role{color:#242923!important}
-.statement span,.statement span.lit{color:#242923!important}
-
-/* Freelance / Side Track body copy */
-.freelance p{color:#242923!important}
-
-/* Journey dates and company names: dark and bold for readability. */
-.journey .stop .date{color:#242923!important;font-weight:700}
-.journey .company{color:#242923!important;font-weight:700}
-
-/* Services: retain green service titles; descriptions are dark and regular-weight. */
-.svc-row h3{font-weight:800}
-.svc-row p{color:#242923!important;font-weight:400}
-
-/* Contact role and contact labels are bold, with their existing colors preserved. */
-.c-grid .role{font-weight:700}
-.c-grid dt{font-weight:700}
-
-/* Navigation labels and scroll-completion percentage are bold. */
-nav ul a{font-weight:700}
-#progress span{font-weight:700}
-
-/* Side Track statistic cards: remove white fills while retaining their borders. */
-.stats div{background:transparent!important}
-
-
-
-/* Main Journey: reveal each complete experience entry in sequence. */
-.journey .stop {
-  opacity: 0;
-  transform: translateY(24px);
-  transition: opacity .85s ease, transform .85s cubic-bezier(.2,.8,.2,1), color .5s;
-  will-change: opacity, transform;
-}
-.journey .stop.on {
-  opacity: 1;
-  transform: translateY(0);
-}
-@media (prefers-reduced-motion: reduce) {
-  .journey .stop,
-  .journey .stop.on {
-    opacity: 1;
-    transform: none;
-    transition: none;
-    will-change: auto;
-  }
-}
-
-/* Final refinements: restore scroll-driven statement fade, outlined Side Track cards,
-   and slower staggered service reveals. */
-.statement span,
-.statement span.lit {
-  color: #242923 !important;
-  opacity: .2;
-  transition: opacity .45s ease, color .45s ease;
-}
-.statement span.lit {
-  opacity: 1;
-}
-
-.stats {
-  background: transparent !important;
-  border: 0 !important;
-  gap: 10px;
-}
-.stats div {
-  background: transparent !important;
-  border: 1px solid #858b81 !important;
-}
-
-.svc-row {
-  transition-delay: var(--svc-delay, 0s);
-}
-.svc-row p {
-  transition: opacity 1.35s ease, transform 1.35s cubic-bezier(.2,.8,.2,1);
-  transition-delay: calc(var(--svc-delay, 0s) + .25s);
-}
-
-
-/* Final map containment safeguards: Leaflet must remain inside each country card. */
-.country { position: relative; isolation: isolate; min-width: 0; overflow: hidden; }
-.country .project-map {
-  position: relative; display: block; width: 100%; height: 360px;
-  min-height: 360px; max-height: 360px; flex: 0 0 360px;
-  overflow: hidden; isolation: isolate; contain: layout paint; z-index: 0;
-}
-.country .project-map .leaflet-container {
-  position: relative; width: 100%; height: 100%; max-height: 100%;
-  overflow: hidden; z-index: 0;
-}
-@media (max-width: 600px) {
-  .country .project-map { height: 300px; min-height: 300px; max-height: 300px; flex-basis: 300px; }
-}
-
-
-/* Requested final color refinements: use the statement's dark grey (#242923). */
-.marquee span:hover { color: #242923 !important; }
-.journey .position { color: #242923 !important; }
-.stats b.silver {
-  background: none !important;
-  -webkit-background-clip: initial !important;
-  background-clip: initial !important;
-  -webkit-text-fill-color: #242923 !important;
-  color: #242923 !important;
-}
-.stats .mono { color: #242923 !important; }
-.country[data-c="eg"] h3 { color: #242923 !important; }
-.svc-row h3 { color: #242923 !important; }
-.svc-row:hover h3 { color: #55745B !important; }
-#contact h2 .chrome {
-  background: none !important;
-  -webkit-background-clip: initial !important;
-  background-clip: initial !important;
-  -webkit-text-fill-color: #242923 !important;
-  color: #242923 !important;
-  animation: none !important;
-}
-
-/* Keep the staggered, scroll-triggered service reveal, but make it quicker. */
-.svc-row { transition-delay: var(--svc-delay, 0s); }
-.svc-row p {
-  transition: opacity .9s ease, transform .9s cubic-bezier(.2,.8,.2,1);
-  transition-delay: calc(var(--svc-delay, 0s) + .12s);
-}
-
 </style>
 </head>
 
@@ -727,14 +471,14 @@ nav ul a{font-weight:700}
       <h3 class="silver">Egypt</h3>
       <div class="meta mono"><b>14</b> projects · <b>EGP 1.35B+</b> · <b>7</b> clients</div>
       <div class="project-map" id="map-eg" role="application" aria-label="Interactive map of 14 freelance projects in Egypt"></div>
-      <p class="mono" style="font-size:9px;margin-top:10px;color:#777">Project locations · Select a marker to view details</p>
+      <p class="mono" style="font-size:9px;margin-top:10px;color:#777">Approximate project locations · Select a marker to view details</p>
     </div>
     <div class="country reveal" data-c="ksa">
       <span class="big">SA</span>
       <h3 class="silver">Kingdom of Saudi Arabia</h3>
       <div class="meta mono"><b>4</b> projects · <b>2</b> clients</div>
       <div class="project-map" id="map-ksa" role="application" aria-label="Interactive map of 4 freelance projects in Saudi Arabia"></div>
-      <p class="mono" style="font-size:9px;margin-top:10px;color:#777">Project locations · Select a marker to view details</p>
+      <p class="mono" style="font-size:9px;margin-top:10px;color:#777">Approximate project locations · Select a marker to view details</p>
     </div>
   </div>
 </section>
@@ -963,8 +707,8 @@ st.innerHTML=st.textContent.split(" ").map(w=>`<span>${esc(w)}</span>`).join(" "
 const words=[...st.children];
 
 /* Services */
-$("#svc").innerHTML=SERVICES.map(([t,d],i)=>`
-  <article class="svc-row reveal" style="--svc-delay:${i*.22}s">
+$("#svc").innerHTML=SERVICES.map(([t,d])=>`
+  <article class="svc-row reveal">
     <h3>${esc(t)}</h3>
     <p>${esc(d)}</p>
   </article>
@@ -982,7 +726,7 @@ const PROJECT_COORDS = [
   [30.02630868153002, 31.20321974817021], // Al Giza
   [30.302086801184352, 31.73682738773248], // 10th of Ramadan
   [30.11550637031798, 31.33381101023872], // Ain Shams Gesr El Suez
-  [30.007094204597177, 31.494143122184045], // Mostakbal City Zizinia
+  [30.051835513558128, 31.627103463527096], // Mostakbal City Zizinia
   [30.04571595809429, 31.66151508429415], // Mostakbal City HAP Town
   [29.981543966339267, 31.774329002886144], // Anakaji, New Administrative Capital
   [28.134635163963253, 33.271813100238], // Ras Shukeir Hurghada
@@ -998,25 +742,13 @@ function initProjectMap(countryCode, elementId, center, zoom) {
   const element = document.getElementById(elementId);
   if (!element || !window.L) return;
   // Enable mouse dragging and wheel zoom on the map under the cursor.
-  const map = L.map(element, {
-    dragging: true,
-    scrollWheelZoom: false,
-    zoomControl: true,
-    touchZoom: true,
-    doubleClickZoom: false,
-    boxZoom: true,
-    keyboard: true,
-    preferCanvas: true,
-    zoomSnap: 1,
-    minZoom: 3,
-    maxZoom: 8
-  });
+  const map = L.map(element, {dragging:true, scrollWheelZoom:true, zoomControl:true, touchZoom:true, doubleClickZoom:true, boxZoom:true, keyboard:true, preferCanvas:true});
   mapInstances[countryCode] = map;
-  // CARTO Voyager raster tiles authenticated with the supplied API key.
-  L.tileLayer('https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png?key=cb1_4w89_1_a4207b9ec8bf1d406131ac20', {
-    maxZoom:8,
-    attribution:'&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a>'
-  }).addTo(map);
+  // Voyager basemap generally provides English-facing labels while retaining geographic detail.
+L.tileLayer('https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png?key=cb1_4w89_1_a4207b9ec8bf1d406131ac20', {
+  maxZoom: 19,
+  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a>'
+}).addTo(map);
   map.setView(center, zoom);
 
   const visible = PROJECTS.map((project, index) => ({project, index}))
@@ -1032,21 +764,23 @@ function initProjectMap(countryCode, elementId, center, zoom) {
     const number = String(index + 1).padStart(2, '0');
     const icon = L.divIcon({
       className:'',
-      html:`<div class="project-pin"><svg viewBox="0 0 30 38" aria-hidden="true"><path d="M15 37 C12.8 32.4 2 21.1 2 14.5 A13 13 0 1 1 28 14.5 C28 21.1 17.2 32.4 15 37Z" fill="#D4AF62" stroke="#FFF0BF" stroke-width="1.2"/><circle cx="15" cy="14.5" r="8.5" fill="#080808" stroke="#FFF0BF" stroke-width=".7"/></svg><span>${number}</span></div>`,
+      html:`<div class="project-pin"><svg viewBox="0 0 30 38" aria-hidden="true"><path d="M15 37 C12.8 32.4 2 21.1 2 14.5 A13 13 0 1 1 28 14.5 C28 21.1 17.2 32.4 15 37Z" fill="#F3EDE0" stroke="none"/><circle cx="15" cy="14.5" r="8.5" fill="#080808" stroke="#F3EDE0" stroke-width=".7"/></svg><span>${number}</span></div>`,
       iconSize:[30,38],
       iconAnchor:[15,37]
     });
     const cleanTitle = project.title.replace(/<[^>]*>/g,'');
     const marker = L.marker([lat,lng], {icon, keyboard:true, title:cleanTitle}).addTo(map);
-    marker.bindTooltip(`${number} · ${cleanTitle} — ${project.loc}`, {className:'project-tip', direction:'top', offset:[0,-34]});
+    marker.bindTooltip(`${number} · ${cleanTitle}`, {
+    className:'project-tip',
+    direction:'top',
+    offset:[0,-34]
+  });
     marker.bindPopup(`<div class="map-popup-title">${cleanTitle}</div><div class="map-popup-meta">${project.loc} · ${project.c === 'eg' ? 'Egypt' : 'Saudi Arabia'}</div><div class="map-popup-action">Select marker to view project details ↗</div>`);
     marker.on('click', () => openProject(index));
   });
   if (bounds.length > 1) map.fitBounds(bounds, {padding:[24,24], maxZoom:8});
   else if (bounds.length === 1) map.setView(bounds[0], 8);
-  requestAnimationFrame(() => {
-    map.invalidateSize({ pan: false });
-  });
+  setTimeout(() => map.invalidateSize(), 80);
 }
 
 initProjectMap('eg', 'map-eg', [28.7, 31.5], 5);
@@ -1150,7 +884,7 @@ const io=new IntersectionObserver(entries=>entries.forEach(e=>{
   if(el.id==="journey"){
     const stops=el.querySelectorAll(".stop");
     el.querySelector(".line").style.setProperty("--p","90%");
-    stops.forEach((s,i)=>setTimeout(()=>s.classList.add("on"),450+i*500));
+    stops.forEach((s,i)=>setTimeout(()=>s.classList.add("on"),300+i*380));
   }
   io.unobserve(el);
 }),{threshold:.2});
