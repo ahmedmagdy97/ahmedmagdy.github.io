@@ -28,9 +28,10 @@
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{font-family:var(--display);background:var(--bg);color:var(--text);line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-a{color:inherit}
+a{color:inherit}\
 ::selection{background:#e6e6e6;color:#000}
-body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:100;opacity:.045;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:100;opacity:.045;background-image:url("data:image/svg+xml,%3Csvg xmlns='http__codex_directive_quoted_backslash__://www__codex_directive_quoted_backslash__.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 .mono{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--soft)}
 .silver{background:var(--silver);-webkit-background-clip:text;background-clip:text;color:transparent}
 .chrome{background:var(--chrome);background-size:250% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 7s linear infinite}
@@ -347,8 +348,9 @@ footer{color:#555;padding:26px var(--pad);border-top:1px solid #161616;display:f
   --silver:linear-gradient(135deg,#344B38 0%,#55745B 55%,#78917A 100%);
   --chrome:linear-gradient(100deg,#344B38 0%,#55745B 45%,#78917A 70%,#55745B 100%);
 }
-body{background:#F5F2EA;color:#242923}
+body{background:#F5F2EA;color:#242923}\
 ::selection{background:#55745B;color:#FFFFFF}
+
 body::after{opacity:.018}
 .grid-bg{background-image:repeating-linear-gradient(90deg,rgba(36,41,35,.035) 0 1px,transparent 1px calc(100%/14))}
 #loader{background:#F5F2EA}
@@ -624,7 +626,7 @@ nav ul a{font-weight:700}
         <ul class="projects">
           <li>Al Jawhara – The New Administrative Capital</li>
         </ul>
-        <span class="company">Dream for Contracting, Supplies, &amp; Real Estate</span>
+        <span class="company">Dream for Contracting, Supplies, & Real Estate</span>
       </div>
       <div class="stop">
         <span class="date">May 2022 – Dec 2022</span>
@@ -777,7 +779,7 @@ const PROJECTS = [
 ];
 
 const $ = s => document.querySelector(s);
-const esc = s => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+const esc = s => String(s).replace(/&/g,"&").replace(/</g,"<").replace(/>/g,">");
 const pad2 = n => String(n).padStart(2,"0");
 const label = p => (p.c === "eg" ? "Egypt" : "KSA") + " — Project " + pad2(PROJECTS.filter(q => q.c === p.c).indexOf(p) + 1);
 const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -959,141 +961,38 @@ const PROJECT_COORDS = [
 ];
 
 const mapInstances = {};
-
 function initProjectMap(countryCode, elementId, center, zoom) {
   const element = document.getElementById(elementId);
   if (!element || !window.L) return;
-
-  const map = L.map(element, {
-    dragging: true,
-    scrollWheelZoom: true,
-    zoomControl: true,
-    touchZoom: true,
-    doubleClickZoom: true,
-    boxZoom: true,
-    keyboard: true,
-    preferCanvas: true
-  });
-
+  // Enable mouse dragging and wheel zoom on the map under the cursor.
+  const map = L.map(element, {dragging:true, scrollWheelZoom:true, zoomControl:true, touchZoom:true, doubleClickZoom:true, boxZoom:true, keyboard:true, preferCanvas:true});
   mapInstances[countryCode] = map;
-
-  // CARTO Voyager raster tiles using your API key.
-  // Only one basemap is loaded to avoid duplicate tile requests.
-  const baseLayer = L.tileLayer(
-    'https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png?key=cb1_4w89_1_a4207b9ec8bf1d406131ac20',
-    {
-      maxZoom: 19,
-      attribution:
-        '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a> &copy; <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a>',
-      keepBuffer: 4,
-      updateWhenIdle: true
-    }
-  ).addTo(map);
-
-  map.setView(center, zoom);
-
-  requestAnimationFrame(() => {
-    map.invalidateSize({ pan: false });
-  });
-
-  baseLayer.on('tileerror', function (event) {
-    console.warn('CARTO map tile failed to load:', event.tile?.src);
-  });
-
-  // Display only projects belonging to this country.
-  const visible = PROJECTS
-    .map((project, index) => ({ project, index }))
-    .filter(item => item.project.c === countryCode);
-
-  const bounds = [];
-
-  visible.forEach(({ project, index }) => {
-    const point = PROJECT_COORDS[index];
-    if (!point) return;
-
-    const lat = point[0];
-    const lng = point[1];
-
-    bounds.push([lat, lng]);
-
-    const number = String(index + 1).padStart(2, '0');
-
-    const icon = L.divIcon({
-      className: '',
-      html: `
-        <div class="project-pin">
-          <svg viewBox="0 0 30 38" aria-hidden="true">
-            <path
-              d="M15 37 C12.8 32.4 2 21.1 2 14.5 A13 13 0 1 1 28 14.5 C28 21.1 17.2 32.4 15 37Z"
-              fill="#D4AF62"
-              stroke="#FFF0BF"
-              stroke-width="1.2"
-            />
-            <circle
-              cx="15"
-              cy="14.5"
-              r="8.5"
-              fill="#080808"
-              stroke="#FFF0BF"
-              stroke-width=".7"
-            />
-          </svg>
-          <span>${number}</span>
-        </div>
-      `,
-      iconSize: [30, 38],
-      iconAnchor: [15, 37]
-    });
-
-    const cleanTitle = project.title.replace(/<[^>]*>/g, '');
-
-    const marker = L.marker([lat, lng], {
-      icon,
-      keyboard: true,
-      title: cleanTitle
-    }).addTo(map);
-
-    marker.bindTooltip(
-      `${number} · ${cleanTitle} — ${project.loc}`,
-      {
-        className: 'project-tip',
-        direction: 'top',
-        offset: [0, -34]
-      }
-    );
-
-    marker.bindPopup(`
-      <div class="map-popup-title">${cleanTitle}</div>
-      <div class="map-popup-meta">
-        ${project.loc} · ${project.c === 'eg' ? 'Egypt' : 'Saudi Arabia'}
-      </div>
-      <div class="map-popup-action">
-        Select marker to view project details ↗
-      </div>
-    `);
-
-    marker.on('click', () => openProject(index));
-  });
-
-  if (bounds.length > 1) {
-    map.fitBounds(bounds, {
-      padding: [24, 24],
-      maxZoom: 8
-    });
-  } else if (bounds.length === 1) {
-    map.setView(bounds[0], 8);
+  // OpenStreetMap basemap with warm-green styling applied through CSS.
+const baseLayer = L.tileLayer(
+  'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+  {
+    maxZoom: 19,
+    attribution:
+      '© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a>',
+    errorTileUrl: '',
+    keepBuffer: 4,
+    updateWhenIdle: true
   }
+).addTo(map);
 
-  setTimeout(() => {
-    map.invalidateSize();
-  }, 80);
-}
+map.setView(center, zoom);
+
+// Ensure tiles render at the correct dimensions.
+requestAnimationFrame(() => {
+  map.invalidateSize({ pan: false });
+});
+
 baseLayer.on('tileerror', function (event) {
   console.warn('Map tile failed to load:', event.tile?.src);
 });
   L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
     maxZoom:19,
-    attribution:'&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a>'
+    attribution:'© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> © <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a>'
   }).addTo(map);
   map.setView(center, zoom);
 
@@ -1271,4 +1170,4 @@ addEventListener("scroll",onScroll,{passive:true});
 onScroll();
 </script>
 </body>
-</html>
+</html>\
